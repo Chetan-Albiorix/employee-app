@@ -11,6 +11,7 @@ import {
   PaperWrapper,
 } from '../../common/Global.Style'
 import DatePicker from '../DatePicker/DatePicker'
+import FileUpload from '../FileUpload/FileUpload'
 
 const PersonalDetail: React.FC = () => {
   return (
@@ -85,11 +86,7 @@ const PersonalDetail: React.FC = () => {
             </Grid>
             <Grid xs={6}>
               <Box mx={3} my={1}>
-                <TextField
-                  id="standard-disabled"
-                  label="Image"
-                  fullWidth
-                />
+                <FileUpload />
               </Box>
             </Grid>
             <Grid xs={6}>
