@@ -1,10 +1,4 @@
 import React from 'react'
-import {
-  makeStyles,
-  Theme,
-  createStyles,
-} from '@material-ui/core/styles'
-import Stepper from '@material-ui/core/Stepper'
 import Step from '@material-ui/core/Step'
 import StepLabel from '@material-ui/core/StepLabel'
 import Button from '@material-ui/core/Button'
@@ -19,22 +13,9 @@ import {
   StepperContainer,
   StepperContainerFooter,
   StepperContentWrapper,
+  StepperStyle,
 } from './AddOrEditEmployeeDetail.Style'
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      width: '100%',
-    },
-    backButton: {
-      marginRight: theme.spacing(1),
-    },
-    instructions: {
-      marginTop: theme.spacing(1),
-      marginBottom: theme.spacing(1),
-    },
-  })
-)
+import { Box } from '@material-ui/core'
 
 function getSteps() {
   return [
@@ -67,9 +48,8 @@ function getStepContent(stepIndex: number) {
 }
 
 const AddOrEditEmployeeDetail: React.FC = () => {
-  const classes = useStyles()
   const [activeStep, setActiveStep] =
-    React.useState(0)
+    React.useState(3)
   const steps = getSteps()
 
   const handleNext = () => {
@@ -90,7 +70,7 @@ const AddOrEditEmployeeDetail: React.FC = () => {
 
   return (
     <StepperContainer fluid spacing={1}>
-      <Stepper
+      <StepperStyle
         activeStep={activeStep}
         alternativeLabel
       >
@@ -99,13 +79,11 @@ const AddOrEditEmployeeDetail: React.FC = () => {
             <StepLabel>{label}</StepLabel>
           </Step>
         ))}
-      </Stepper>
+      </StepperStyle>
       <div>
         {activeStep === steps.length ? (
           <div>
-            <Typography
-              className={classes.instructions}
-            >
+            <Typography>
               All steps completed
             </Typography>
             <Button onClick={handleReset}>
@@ -113,33 +91,38 @@ const AddOrEditEmployeeDetail: React.FC = () => {
             </Button>
           </div>
         ) : (
-          <StepperContentWrapper xs={12}>
-            <Typography
-              className={classes.instructions}
-            >
-              <h2>
+          <>
+            <StepperContentWrapper xs={12}>
+              <Typography>
                 {getStepContent(activeStep)}
-              </h2>
-            </Typography>
+              </Typography>
+            </StepperContentWrapper>
             <StepperContainerFooter>
-              <Button
-                disabled={activeStep === 0}
-                onClick={handleBack}
-                className={classes.backButton}
-              >
-                Back
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleNext}
-              >
-                {activeStep === steps.length - 1
-                  ? 'Finish'
-                  : 'Next'}
-              </Button>
+              <Box component="span" m={1}>
+                <Button
+                  variant="contained"
+                  disabled={activeStep === 0}
+                  onClick={handleBack}
+                  color="secondary"
+                  size="large"
+                >
+                  Back
+                </Button>
+              </Box>
+              <Box component="span" m={1}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleNext}
+                  size="large"
+                >
+                  {activeStep === steps.length - 1
+                    ? 'Finish'
+                    : 'Next'}
+                </Button>
+              </Box>
             </StepperContainerFooter>
-          </StepperContentWrapper>
+          </>
         )}
       </div>
     </StepperContainer>

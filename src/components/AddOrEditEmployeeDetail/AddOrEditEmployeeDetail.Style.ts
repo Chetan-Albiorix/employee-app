@@ -1,8 +1,14 @@
 import { Grid } from '@material-ui/core'
 import styled from 'styled-components'
+import Stepper from '@material-ui/core/Stepper'
 
 export const StepperContainer: any = styled(Grid)`
-  border: 1px solid silver;
+  border: 0px solid silver;
+`
+
+export const StepperStyle: any = styled(Stepper)`
+  padding: 20px 0px 0px 0px !important;
+  background-color: Snow !important;
 `
 
 export const StepperContainerFooter: any = styled.div`
@@ -13,8 +19,8 @@ export const StepperContainerFooter: any = styled.div`
 export const StepperContentWrapper: any = styled(
   Grid
 )`
-  border: 1px solid red;
+  border: 1px solid Snow;
   height: 450px;
-  margin-left: 60px;
-  margin-right: 30px;
+  border: 1px solid white;
+  // overflow: auto;
 `
