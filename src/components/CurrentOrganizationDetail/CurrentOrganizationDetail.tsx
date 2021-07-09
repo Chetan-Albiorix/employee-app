@@ -8,6 +8,7 @@ import {
   PaperWrapper,
   StepperContainerWrapper,
 } from '../../common/Global.Style'
+import DatePicker from '../DatePicker/DatePicker'
 
 const CurrentOrganizationDetail: React.FC =
   () => {
@@ -19,19 +20,21 @@ const CurrentOrganizationDetail: React.FC =
             <Grid container>
               <Grid xs={6}>
                 <Box mx={3} my={1}>
-                  <TextField
-                    id="standard-disabled"
+                  <DatePicker
+                    date={new Date()}
                     label="Joining Date"
-                    fullWidth
+                    disableFuture={true}
+                    onDateChanged={() => {}}
                   />
                 </Box>
               </Grid>
               <Grid xs={6}>
                 <Box mx={3} my={1}>
-                  <TextField
-                    id="standard-disabled"
+                  <DatePicker
+                    date={new Date()}
                     label="Next Appraisal Date"
-                    fullWidth
+                    disableFuture={false}
+                    onDateChanged={() => {}}
                   />
                 </Box>
               </Grid>

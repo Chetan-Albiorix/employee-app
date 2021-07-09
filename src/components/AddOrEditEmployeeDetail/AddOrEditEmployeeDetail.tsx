@@ -49,7 +49,7 @@ function getStepContent(stepIndex: number) {
 
 const AddOrEditEmployeeDetail: React.FC = () => {
   const [activeStep, setActiveStep] =
-    React.useState(3)
+    React.useState(0)
   const steps = getSteps()
 
   const handleNext = () => {

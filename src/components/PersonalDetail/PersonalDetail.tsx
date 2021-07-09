@@ -10,6 +10,7 @@ import {
   StepperContainerWrapper,
   PaperWrapper,
 } from '../../common/Global.Style'
+import DatePicker from '../DatePicker/DatePicker'
 
 const PersonalDetail: React.FC = () => {
   return (
@@ -74,10 +75,11 @@ const PersonalDetail: React.FC = () => {
             </Grid>
             <Grid xs={6}>
               <Box mx={3} my={1}>
-                <TextField
-                  id="standard-disabled"
+                <DatePicker
+                  date={new Date()}
                   label="Birth Date"
-                  fullWidth
+                  disableFuture={true}
+                  onDateChanged={() => {}}
                 />
               </Box>
             </Grid>
