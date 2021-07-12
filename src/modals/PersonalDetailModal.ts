@@ -1,3 +1,12 @@
+class Image {
+  fileName: string
+  imageSrc: string
+
+  constructor() {
+    this.fileName = ''
+    this.imageSrc = ''
+  }
+}
 export default class PersonalDetailModal {
   firstName: string
   middleName: string
@@ -7,8 +16,8 @@ export default class PersonalDetailModal {
   email: string
   birthday: Date | null
   presentAddress: string
-  PermanentAddress: string
-  image: string
+  permanentAddress: string
+  image: Image
 
   constructor() {
     this.firstName = ''
@@ -19,7 +28,7 @@ export default class PersonalDetailModal {
     this.email = ''
     this.birthday = null
     this.presentAddress = ''
-    this.PermanentAddress = ''
-    this.image = ''
+    this.permanentAddress = ''
+    this.image = new Image()
   }
 }

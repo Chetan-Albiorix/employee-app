@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import Step from '@material-ui/core/Step'
 import StepLabel from '@material-ui/core/StepLabel'
 import Button from '@material-ui/core/Button'
@@ -16,43 +16,35 @@ import {
   StepperStyle,
 } from './AddOrEditEmployeeDetail.Style'
 import { Box } from '@material-ui/core'
-
-function getSteps() {
-  return [
-    'Personal Detail',
-    'Bank Detail',
-    'Professional Detail',
-    'Education Detail',
-    'Experience Detail',
-    'Current Organization Detail',
-  ]
-}
-
-function getStepContent(stepIndex: number) {
-  switch (stepIndex) {
-    case 0:
-      return <PersonalDetail />
-    case 1:
-      return <BankDetail />
-    case 2:
-      return <ProfessionalDetail />
-    case 3:
-      return <EducationDetail />
-    case 4:
-      return <ExperienceDetail />
-    case 5:
-      return <CurrentOrganizationDetail />
-    default:
-      return 'Unknown stepIndex'
-  }
-}
+import EmployeeDetailModal from '../../modals/EmployeeDetailModal'
 
 const AddOrEditEmployeeDetail: React.FC = () => {
+  const personalDetailRef = useRef()
   const [activeStep, setActiveStep] =
     React.useState(0)
-  const steps = getSteps()
+
+  const [employeeDetail, setEmployeeDetail] =
+    useState<EmployeeDetailModal>(
+      new EmployeeDetailModal()
+    )
 
   const handleNext = () => {
+    switch (activeStep) {
+      case 0:
+        if (personalDetailRef) {
+          const employeeDetailTemp = {
+            ...employeeDetail,
+          }
+          // need to fix this
+          employeeDetailTemp.personalDetail = (
+            personalDetailRef!.current! as any
+          ).getPersonalDetailState()
+          setEmployeeDetail(employeeDetailTemp)
+        }
+        break
+      default:
+        break
+    }
     setActiveStep(
       (prevActiveStep) => prevActiveStep + 1
     )
@@ -66,6 +58,44 @@ const AddOrEditEmployeeDetail: React.FC = () => {
 
   const handleReset = () => {
     setActiveStep(0)
+  }
+
+  const getSteps = () => {
+    return [
+      'Personal Detail',
+      'Bank Detail',
+      'Professional Detail',
+      'Education Detail',
+      'Experience Detail',
+      'Current Organization Detail',
+    ]
+  }
+  const steps = getSteps()
+
+  const getStepContent = (stepIndex: number) => {
+    switch (stepIndex) {
+      case 0:
+        return (
+          <PersonalDetail
+            personalDetailState={
+              employeeDetail.personalDetail
+            }
+            ref={personalDetailRef}
+          />
+        )
+      case 1:
+        return <BankDetail />
+      case 2:
+        return <ProfessionalDetail />
+      case 3:
+        return <EducationDetail />
+      case 4:
+        return <ExperienceDetail />
+      case 5:
+        return <CurrentOrganizationDetail />
+      default:
+        return 'Unknown stepIndex'
+    }
   }
 
   return (

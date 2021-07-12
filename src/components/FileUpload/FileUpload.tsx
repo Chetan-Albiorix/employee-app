@@ -1,14 +1,23 @@
 import { Button } from '@material-ui/core'
 import React from 'react'
+import { useState } from 'react'
 import { FileUploadContainer } from './FileUpload.Style'
 
 interface FileUploadProps {
   label: string
+  onChangeFile?: (
+    fileName: string,
+    imageSrc: string
+  ) => void
 }
 
 const FileUpload: React.FC<FileUploadProps> = ({
   label,
+  onChangeFile,
 }) => {
+  const [fileName, setFileName] =
+    useState<string>('')
+
   const mimeType: string[] = [
     'image/png',
     'image/jpeg',
@@ -28,12 +37,15 @@ const FileUpload: React.FC<FileUploadProps> = ({
     const file = event.target.files[0]
     if (file) {
       try {
-        if (!mimeType.includes(file.type)) {
-          // let fileName =
-          //   file.name.split('.')[0] ?? ''
+        if (mimeType.includes(file.type)) {
+          let fileName =
+            file.name.split('.')[0] ?? ''
           if (file.size / 1024 / 1024 < 1) {
             getBase64(file, (result: any) => {
               console.log(result)
+              setFileName(fileName)
+              onChangeFile &&
+                onChangeFile(fileName, result)
             })
           } else {
             console.log('File size exceeds 1 MiB')
@@ -54,7 +66,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
   return (
     <>
       <FileUploadContainer>
-        {/* <b> No File Selected: </b> */}
+        {/* <b>{fileName ? fileName : 'No File'} </b> */}
         <Button
           variant="contained"
           color="primary"
@@ -69,6 +81,8 @@ const FileUpload: React.FC<FileUploadProps> = ({
             onChange={handleFile}
           />
         </Button>
+        &nbsp;
+        <b>{fileName ? fileName : 'No File'} </b>
       </FileUploadContainer>
     </>
   )
