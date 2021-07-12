@@ -49,7 +49,7 @@ const ExperienceDetail: React.FC = () => {
     setIsEdit(true)
   }
 
-  const updateEducationDetail = (
+  const updateItemDetail = (
     value: string | number,
     index: number,
     propertyName: string
@@ -128,9 +128,7 @@ const ExperienceDetail: React.FC = () => {
               experienceTableHeader
             }
             tableItemList={experienceDetailList}
-            updateEducationDetail={
-              updateEducationDetail
-            }
+            updateItemDetail={updateItemDetail}
             saveEducationDetail={
               saveEducationDetail
             }

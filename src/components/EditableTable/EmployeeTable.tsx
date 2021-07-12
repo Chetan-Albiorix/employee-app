@@ -23,7 +23,7 @@ interface EmployeeTableProps {
   currentIndex: number
   tableHeaderItem: string[]
   tableItemList: any[]
-  updateEducationDetail: (
+  updateItemDetail: (
     value: string,
     index: number,
     propertyName: string
@@ -40,7 +40,7 @@ const EmployeeTable: React.FC<EmployeeTableProps> =
     currentIndex,
     tableHeaderItem,
     tableItemList,
-    updateEducationDetail,
+    updateItemDetail,
     saveEducationDetail,
     cancelEducationDetail,
     editEducationDetail,
@@ -75,7 +75,7 @@ const EmployeeTable: React.FC<EmployeeTableProps> =
                   }
                   fullWidth
                   onChange={(event) =>
-                    updateEducationDetail(
+                    updateItemDetail(
                       event.target.value,
                       index,
                       item

@@ -49,7 +49,7 @@ const EducationDetail: React.FC = () => {
     setIsEdit(true)
   }
 
-  const updateEducationDetail = (
+  const updateItemDetail = (
     value: string | number,
     index: number,
     propertyName: string
@@ -127,9 +127,7 @@ const EducationDetail: React.FC = () => {
             currentIndex={currentIndex}
             tableHeaderItem={educationTableHeader}
             tableItemList={educationDetailList}
-            updateEducationDetail={
-              updateEducationDetail
-            }
+            updateItemDetail={updateItemDetail}
             saveEducationDetail={
               saveEducationDetail
             }
