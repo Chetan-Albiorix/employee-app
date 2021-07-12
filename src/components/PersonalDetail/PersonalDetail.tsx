@@ -86,7 +86,7 @@ const PersonalDetail: React.FC = () => {
             </Grid>
             <Grid xs={6}>
               <Box mx={3} my={1}>
-                <FileUpload />
+                <FileUpload label="Image" />
               </Box>
             </Grid>
             <Grid xs={6}>

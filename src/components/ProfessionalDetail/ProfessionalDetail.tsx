@@ -8,6 +8,7 @@ import {
   PaperWrapper,
   StepperContainerWrapper,
 } from '../../common/Global.Style'
+import FileUpload from '../FileUpload/FileUpload'
 
 const ProfessionalDetail: React.FC = () => {
   return (
@@ -72,11 +73,12 @@ const ProfessionalDetail: React.FC = () => {
             </Grid>
             <Grid xs={6}>
               <Box mx={3} my={1}>
-                <TextField
+                {/* <TextField
                   id="standard-disabled"
                   label="Upload Resume"
                   fullWidth
-                />
+                /> */}
+                <FileUpload label="Resume" />
               </Box>
             </Grid>
           </Grid>

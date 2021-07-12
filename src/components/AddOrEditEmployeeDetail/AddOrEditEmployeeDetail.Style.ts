@@ -14,13 +14,14 @@ export const StepperStyle: any = styled(Stepper)`
 export const StepperContainerFooter: any = styled.div`
   text-align: right;
   padding-right: 1%;
+  padding-top: 10px;
 `
 
 export const StepperContentWrapper: any = styled(
   Grid
 )`
   border: 1px solid Snow;
-  height: 450px;
-  border: 1px solid white;
-  // overflow: auto;
+  height: 470px;
+  border: 0px solid white;
+  overflow: auto;
 `

@@ -10,8 +10,8 @@ export default class EmployeeDetailModal {
   personalDetail: PersonalDetailModal
   bankDetail: BankDetailModal
   professionalDetail: ProfessionalDetailModal
-  educationDetail: EducationDetailModal
-  experienceDetail: ExperienceDetailModal
+  educationDetail: EducationDetailModal[]
+  experienceDetail: ExperienceDetailModal[]
   currentOrganizationDetail: CurrentOrganizationDetailModal
 
   constructor() {
@@ -21,10 +21,8 @@ export default class EmployeeDetailModal {
     this.bankDetail = new BankDetailModal()
     this.professionalDetail =
       new ProfessionalDetailModal()
-    this.educationDetail =
-      new EducationDetailModal()
-    this.experienceDetail =
-      new ExperienceDetailModal()
+    this.educationDetail = []
+    this.experienceDetail = []
     this.currentOrganizationDetail =
       new CurrentOrganizationDetailModal()
   }

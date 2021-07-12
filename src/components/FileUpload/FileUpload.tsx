@@ -2,7 +2,13 @@ import { Button } from '@material-ui/core'
 import React from 'react'
 import { FileUploadContainer } from './FileUpload.Style'
 
-const FileUpload: React.FC = () => {
+interface FileUploadProps {
+  label: string
+}
+
+const FileUpload: React.FC<FileUploadProps> = ({
+  label,
+}) => {
   const mimeType: string[] = [
     'image/png',
     'image/jpeg',
@@ -55,7 +61,7 @@ const FileUpload: React.FC = () => {
           size="small"
           component="label"
         >
-          Upload
+          Upload {label}
           <input
             type="file"
             hidden
