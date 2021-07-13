@@ -1,6 +1,9 @@
 import {
   Box,
   Grid,
+  InputLabel,
+  MenuItem,
+  Select,
   TextField,
 } from '@material-ui/core'
 import React, {
@@ -15,6 +18,15 @@ import {
 import FileUpload from '../FileUpload/FileUpload'
 import ProfessionalDetailModal from '../../modals/ProfessionalDetailModal'
 import { FileModal } from '../../modals/FileModal'
+import MultiSelect, {
+  ListItem,
+} from '../MultiSelect/MultiSelect'
+import {
+  ExperienceTextFieldWrapper,
+  ExperienceTextLabel,
+  FormControlWrapper,
+} from './ProfessionalDetail.Style'
+import { useEffect } from 'react'
 
 interface ProfessionalDetailProps {
   professionalDetailState: ProfessionalDetailModal
@@ -28,6 +40,38 @@ const ProfessionalDetail: React.FC<ProfessionalDetailProps> =
         'application/pdf',
       ]
 
+      const [experienceYear, setExperienceYear] =
+        useState<number>(0)
+
+      const [
+        experienceMonth,
+        setExperienceMonth,
+      ] = useState<number>(0)
+
+      const yearsList: number[] = [
+        ...Array(15).keys(),
+      ]
+
+      // for create 1 to 12 list record array
+      const monthsList: number[] = [
+        ...Array(11).keys(),
+      ].map((x) => x + 1)
+
+      const skillsList: ListItem[] = [
+        {
+          id: 1,
+          value: 'Java',
+        },
+        {
+          id: 2,
+          value: 'Python',
+        },
+        {
+          id: 2,
+          value: 'ASP.NET',
+        },
+      ]
+
       const [
         professionalDetail,
         setProfessionalDetail,
@@ -36,7 +80,7 @@ const ProfessionalDetail: React.FC<ProfessionalDetailProps> =
       )
 
       const updateProfessionalDetail = (
-        value: string,
+        value: string | string[],
         propertyName: string
       ) => {
         const professionalDetailTemp = {
@@ -62,6 +106,47 @@ const ProfessionalDetail: React.FC<ProfessionalDetailProps> =
           professionalDetailTemp
         )
       }
+
+      useEffect(() => {
+        const professionalDetailTemp = {
+          ...professionalDetail,
+        }
+        let experience =
+          experienceYear + '.' + experienceMonth
+
+        professionalDetailTemp.experience =
+          Number(experience)
+        setProfessionalDetail(
+          professionalDetailTemp
+        )
+        // call only experience Year or Month changed
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, [experienceYear, experienceMonth])
+
+      // set experience in selection dropdown
+      useEffect(() => {
+        if (
+          professionalDetail &&
+          professionalDetail.experience > 0
+        ) {
+          setExperienceYear(
+            Number(
+              professionalDetail.experience
+                .toString()
+                .split('.')[0]
+            )
+          )
+          setExperienceMonth(
+            Number(
+              professionalDetail.experience
+                .toString()
+                .split('.')[1]
+            )
+          )
+        }
+        // call only first time when component is load
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, [])
 
       useImperativeHandle(
         ref,
@@ -117,20 +202,74 @@ const ProfessionalDetail: React.FC<ProfessionalDetailProps> =
                 </Grid>
                 <Grid xs={6}>
                   <Box mx={3} my={1}>
-                    <TextField
-                      id="standard-disabled"
-                      label="Experience"
-                      fullWidth
-                      value={
-                        professionalDetail.experience
-                      }
-                      onChange={(event) =>
-                        updateProfessionalDetail(
-                          event.target.value,
-                          'experience'
-                        )
-                      }
-                    />
+                    <ExperienceTextFieldWrapper>
+                      <ExperienceTextLabel>
+                        Experience:
+                      </ExperienceTextLabel>
+                    </ExperienceTextFieldWrapper>
+                    <ExperienceTextFieldWrapper>
+                      <FormControlWrapper>
+                        <InputLabel id="demo-simple-select-label">
+                          Years
+                        </InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          value={experienceYear}
+                          onChange={(event) =>
+                            setExperienceYear(
+                              event.target
+                                .value as number
+                            )
+                          }
+                          fullWidth
+                        >
+                          {yearsList.map(
+                            (value) => {
+                              return (
+                                <MenuItem
+                                  value={value}
+                                >
+                                  {value} Years
+                                </MenuItem>
+                              )
+                            }
+                          )}
+                        </Select>
+                      </FormControlWrapper>
+                    </ExperienceTextFieldWrapper>
+                    <ExperienceTextFieldWrapper>
+                      <FormControlWrapper>
+                        <InputLabel id="demo-simple-select-label">
+                          Months
+                        </InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          value={experienceMonth}
+                          onChange={(event) =>
+                            setExperienceMonth(
+                              event.target
+                                .value as number
+                            )
+                          }
+                          fullWidth
+                        >
+                          {monthsList.map(
+                            (value) => {
+                              return (
+                                <MenuItem
+                                  key={value}
+                                  value={value}
+                                >
+                                  {value} Month
+                                </MenuItem>
+                              )
+                            }
+                          )}
+                        </Select>
+                      </FormControlWrapper>
+                    </ExperienceTextFieldWrapper>
                   </Box>
                 </Grid>
                 <Grid xs={6}>
@@ -153,47 +292,26 @@ const ProfessionalDetail: React.FC<ProfessionalDetailProps> =
                 </Grid>
                 <Grid xs={6}>
                   <Box mx={3} my={1}>
-                    <TextField
-                      id="standard-disabled"
-                      label="Technologies"
-                      fullWidth
-                      value={
-                        professionalDetail.technologies
-                      }
-                      onChange={(event) =>
-                        updateProfessionalDetail(
-                          event.target.value,
-                          'technologies'
-                        )
-                      }
-                    />
-                  </Box>
-                </Grid>
-                <Grid xs={6}>
-                  <Box mx={3} my={1}>
-                    <TextField
-                      id="standard-disabled"
+                    <MultiSelect
                       label="Skills"
-                      fullWidth
-                      value={
+                      placeHolder="Skills"
+                      optionsList={skillsList}
+                      selectedOptions={
                         professionalDetail.skills
                       }
-                      onChange={(event) =>
+                      updateSelectedOption={(
+                        selectedOptions: string[]
+                      ) => {
                         updateProfessionalDetail(
-                          event.target.value,
+                          selectedOptions,
                           'skills'
                         )
-                      }
+                      }}
                     />
                   </Box>
                 </Grid>
                 <Grid xs={6}>
                   <Box mx={3} my={1}>
-                    {/* <TextField
-                  id="standard-disabled"
-                  label="Upload Resume"
-                  fullWidth
-                /> */}
                     <FileUpload
                       label="Resume"
                       mimeType={pdfMimeType}

@@ -27,12 +27,21 @@ const AddOrEditEmployeeDetail: React.FC = () => {
   const currentOrganizationDetailRef = useRef()
 
   const [activeStep, setActiveStep] =
-    React.useState(5)
+    React.useState(0)
 
   const [employeeDetail, setEmployeeDetail] =
     useState<EmployeeDetailModal>(
       new EmployeeDetailModal()
     )
+
+  const setValueInLocalStorage = (
+    employeeDetail: EmployeeDetailModal
+  ) => {
+    localStorage.setItem(
+      'employeeDetail',
+      JSON.stringify(employeeDetail)
+    )
+  }
 
   const handleNext = () => {
     const employeeDetailTemp = {
@@ -44,6 +53,9 @@ const AddOrEditEmployeeDetail: React.FC = () => {
           employeeDetailTemp.personalDetail = (
             personalDetailRef!.current! as any
           ).getPersonalDetailState()
+          setValueInLocalStorage(
+            employeeDetailTemp
+          )
           setEmployeeDetail(employeeDetailTemp)
         }
         break
@@ -52,6 +64,9 @@ const AddOrEditEmployeeDetail: React.FC = () => {
           employeeDetailTemp.bankDetail = (
             bankDetailRef!.current! as any
           ).getBankDetailState()
+          setValueInLocalStorage(
+            employeeDetailTemp
+          )
           setEmployeeDetail(employeeDetailTemp)
         }
         break
@@ -62,6 +77,9 @@ const AddOrEditEmployeeDetail: React.FC = () => {
               professionalDetailRef!
                 .current! as any
             ).getProfessionalDetailState()
+          setValueInLocalStorage(
+            employeeDetailTemp
+          )
           setEmployeeDetail(employeeDetailTemp)
         }
         break
@@ -70,6 +88,9 @@ const AddOrEditEmployeeDetail: React.FC = () => {
           employeeDetailTemp.educationDetail = (
             educationDetailRef!.current! as any
           ).getEducationDetailState()
+          setValueInLocalStorage(
+            employeeDetailTemp
+          )
           setEmployeeDetail(employeeDetailTemp)
         }
         break
@@ -78,6 +99,9 @@ const AddOrEditEmployeeDetail: React.FC = () => {
           employeeDetailTemp.experienceDetail = (
             experienceDetailRef!.current! as any
           ).getExperienceDetail()
+          setValueInLocalStorage(
+            employeeDetailTemp
+          )
           setEmployeeDetail(employeeDetailTemp)
         }
         break
@@ -88,6 +112,9 @@ const AddOrEditEmployeeDetail: React.FC = () => {
               currentOrganizationDetailRef!
                 .current! as any
             ).getCurrentOrganizationDetailState()
+          setValueInLocalStorage(
+            employeeDetailTemp
+          )
           setEmployeeDetail(employeeDetailTemp)
         }
         break

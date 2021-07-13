@@ -3,18 +3,16 @@ import { FileModal } from './FileModal'
 export default class ProfessionalDetailModal {
   designation: string
   department: string
-  experience: string
+  experience: number
   currentLocation: string
-  technologies: string[]
   skills: string[]
   resumeFile: FileModal
 
   constructor() {
     this.designation = ''
     this.department = ''
-    this.experience = ''
+    this.experience = 0.0
     this.currentLocation = ''
-    this.technologies = []
     this.skills = []
     this.resumeFile = new FileModal()
   }
