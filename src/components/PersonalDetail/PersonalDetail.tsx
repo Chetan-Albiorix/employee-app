@@ -14,20 +14,22 @@ import {
   StepperContainerWrapper,
   PaperWrapper,
 } from '../../common/Global.Style'
+import { FileModal } from '../../modals/FileModal'
 import PersonalDetailModal from '../../modals/PersonalDetailModal'
 import DatePicker from '../DatePicker/DatePicker'
 import FileUpload from '../FileUpload/FileUpload'
 
-interface PersonalDetailProps {
+export interface PersonalDetailProps {
   personalDetailState: PersonalDetailModal
+  ref: any
 }
 
-const PersonalDetail: React.FC<any> = forwardRef(
-  ({ personalDetailState }, ref) => {
-    const [
-      isCopyToPresentAddress,
-      setIsCopyToPresentAddress,
-    ] = useState<boolean>(false)
+const PersonalDetail: React.FC<PersonalDetailProps> =
+  forwardRef(({ personalDetailState }, ref) => {
+    const imageMimeType: string[] = [
+      'image/png',
+      'image/jpeg',
+    ]
 
     const [personalDetail, setPersonalDetail] =
       useState<PersonalDetailModal>(
@@ -49,15 +51,19 @@ const PersonalDetail: React.FC<any> = forwardRef(
     const changeCopyToPresentAddress = (
       isChecked: boolean
     ) => {
-      if (isChecked) {
-        const personalDetailTemp = {
+      const personalDetailTemp: PersonalDetailModal =
+        {
           ...personalDetail,
         }
+      if (isChecked) {
         personalDetailTemp.permanentAddress =
           personalDetailTemp.presentAddress
-        setPersonalDetail(personalDetailTemp)
       }
-      setIsCopyToPresentAddress(isChecked)
+      personalDetailTemp.isCopyToPresentAddress =
+        isChecked
+      setPersonalDetail(personalDetailTemp)
+
+      // setIsCopyToPresentAddress(isChecked)
     }
 
     const updateBirthDate = (
@@ -71,16 +77,12 @@ const PersonalDetail: React.FC<any> = forwardRef(
     }
 
     const updateImage = (
-      fileName: string,
-      imageSrc: string
+      fileObject: FileModal
     ) => {
       const personalDetailTemp = {
         ...personalDetail,
       }
-      personalDetailTemp.image = {
-        fileName,
-        imageSrc,
-      }
+      personalDetailTemp.image = fileObject
       setPersonalDetail(personalDetailTemp)
     }
 
@@ -218,6 +220,8 @@ const PersonalDetail: React.FC<any> = forwardRef(
                 <Box mx={3} my={1}>
                   <FileUpload
                     label="Image"
+                    mimeType={imageMimeType}
+                    file={personalDetail.image}
                     onChangeFile={updateImage}
                   />
                 </Box>
@@ -244,7 +248,7 @@ const PersonalDetail: React.FC<any> = forwardRef(
                     control={
                       <Checkbox
                         checked={
-                          isCopyToPresentAddress
+                          personalDetail.isCopyToPresentAddress
                         }
                         onChange={(event) =>
                           changeCopyToPresentAddress(
@@ -284,7 +288,6 @@ const PersonalDetail: React.FC<any> = forwardRef(
         </StepperContainerWrapper>
       </>
     )
-  }
-)
+  })
 
 export default PersonalDetail

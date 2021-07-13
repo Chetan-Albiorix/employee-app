@@ -1,3 +1,5 @@
+import { FileModal } from './FileModal'
+
 export default class ProfessionalDetailModal {
   designation: string
   department: string
@@ -5,7 +7,7 @@ export default class ProfessionalDetailModal {
   currentLocation: string
   technologies: string[]
   skills: string[]
-  resumeFile: string
+  resumeFile: FileModal
 
   constructor() {
     this.designation = ''
@@ -14,6 +16,6 @@ export default class ProfessionalDetailModal {
     this.currentLocation = ''
     this.technologies = []
     this.skills = []
-    this.resumeFile = ''
+    this.resumeFile = new FileModal()
   }
 }

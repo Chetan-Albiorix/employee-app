@@ -20,8 +20,14 @@ import EmployeeDetailModal from '../../modals/EmployeeDetailModal'
 
 const AddOrEditEmployeeDetail: React.FC = () => {
   const personalDetailRef = useRef()
+  const bankDetailRef = useRef()
+  const professionalDetailRef = useRef()
+  const educationDetailRef = useRef()
+  const experienceDetailRef = useRef()
+  const currentOrganizationDetailRef = useRef()
+
   const [activeStep, setActiveStep] =
-    React.useState(0)
+    React.useState(5)
 
   const [employeeDetail, setEmployeeDetail] =
     useState<EmployeeDetailModal>(
@@ -29,16 +35,59 @@ const AddOrEditEmployeeDetail: React.FC = () => {
     )
 
   const handleNext = () => {
+    const employeeDetailTemp = {
+      ...employeeDetail,
+    }
     switch (activeStep) {
       case 0:
         if (personalDetailRef) {
-          const employeeDetailTemp = {
-            ...employeeDetail,
-          }
-          // need to fix this
           employeeDetailTemp.personalDetail = (
             personalDetailRef!.current! as any
           ).getPersonalDetailState()
+          setEmployeeDetail(employeeDetailTemp)
+        }
+        break
+      case 1:
+        if (bankDetailRef) {
+          employeeDetailTemp.bankDetail = (
+            bankDetailRef!.current! as any
+          ).getBankDetailState()
+          setEmployeeDetail(employeeDetailTemp)
+        }
+        break
+      case 2:
+        if (professionalDetailRef) {
+          employeeDetailTemp.professionalDetail =
+            (
+              professionalDetailRef!
+                .current! as any
+            ).getProfessionalDetailState()
+          setEmployeeDetail(employeeDetailTemp)
+        }
+        break
+      case 3:
+        if (educationDetailRef) {
+          employeeDetailTemp.educationDetail = (
+            educationDetailRef!.current! as any
+          ).getEducationDetailState()
+          setEmployeeDetail(employeeDetailTemp)
+        }
+        break
+      case 4:
+        if (experienceDetailRef) {
+          employeeDetailTemp.experienceDetail = (
+            experienceDetailRef!.current! as any
+          ).getExperienceDetail()
+          setEmployeeDetail(employeeDetailTemp)
+        }
+        break
+      case 5:
+        if (currentOrganizationDetailRef) {
+          employeeDetailTemp.currentOrganizationDetail =
+            (
+              currentOrganizationDetailRef!
+                .current! as any
+            ).getCurrentOrganizationDetailState()
           setEmployeeDetail(employeeDetailTemp)
         }
         break
@@ -84,15 +133,50 @@ const AddOrEditEmployeeDetail: React.FC = () => {
           />
         )
       case 1:
-        return <BankDetail />
+        return (
+          <BankDetail
+            bankDetailState={
+              employeeDetail.bankDetail
+            }
+            ref={bankDetailRef}
+          />
+        )
       case 2:
-        return <ProfessionalDetail />
+        return (
+          <ProfessionalDetail
+            professionalDetailState={
+              employeeDetail.professionalDetail
+            }
+            ref={professionalDetailRef}
+          />
+        )
       case 3:
-        return <EducationDetail />
+        return (
+          <EducationDetail
+            educationDetailState={
+              employeeDetail.educationDetail
+            }
+            ref={educationDetailRef}
+          />
+        )
       case 4:
-        return <ExperienceDetail />
+        return (
+          <ExperienceDetail
+            experienceDetailState={
+              employeeDetail.experienceDetail
+            }
+            ref={experienceDetailRef}
+          />
+        )
       case 5:
-        return <CurrentOrganizationDetail />
+        return (
+          <CurrentOrganizationDetail
+            currentOrganizationDetailState={
+              employeeDetail.currentOrganizationDetail
+            }
+            ref={currentOrganizationDetailRef}
+          />
+        )
       default:
         return 'Unknown stepIndex'
     }

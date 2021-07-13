@@ -1,12 +1,5 @@
-class Image {
-  fileName: string
-  imageSrc: string
+import { FileModal } from './FileModal'
 
-  constructor() {
-    this.fileName = ''
-    this.imageSrc = ''
-  }
-}
 export default class PersonalDetailModal {
   firstName: string
   middleName: string
@@ -17,7 +10,8 @@ export default class PersonalDetailModal {
   birthday: Date | null
   presentAddress: string
   permanentAddress: string
-  image: Image
+  image: FileModal
+  isCopyToPresentAddress?: boolean
 
   constructor() {
     this.firstName = ''
@@ -29,6 +23,7 @@ export default class PersonalDetailModal {
     this.birthday = null
     this.presentAddress = ''
     this.permanentAddress = ''
-    this.image = new Image()
+    this.image = new FileModal()
+    this.isCopyToPresentAddress = false
   }
 }
