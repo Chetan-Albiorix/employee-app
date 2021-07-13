@@ -1,18 +1,25 @@
 import { Button } from '@material-ui/core'
 import React from 'react'
+import { useState } from 'react'
+import { FileModal } from '../../modals/FileModal'
 import { FileUploadContainer } from './FileUpload.Style'
 
 interface FileUploadProps {
+  mimeType: string[]
   label: string
+  onChangeFile?: (fileObject: FileModal) => void
+  file: FileModal
 }
 
 const FileUpload: React.FC<FileUploadProps> = ({
+  mimeType,
   label,
+  onChangeFile,
+  file,
 }) => {
-  const mimeType: string[] = [
-    'image/png',
-    'image/jpeg',
-  ]
+  const [fileObject, setFileObject] =
+    useState<FileModal>(file)
+
   const getBase64 = (file: any, result: any) => {
     let reader = new FileReader()
     reader.readAsDataURL(file)
@@ -28,12 +35,22 @@ const FileUpload: React.FC<FileUploadProps> = ({
     const file = event.target.files[0]
     if (file) {
       try {
-        if (!mimeType.includes(file.type)) {
-          // let fileName =
-          //   file.name.split('.')[0] ?? ''
+        if (mimeType.includes(file.type)) {
+          let fileName =
+            file.name.split('.')[0] ?? ''
           if (file.size / 1024 / 1024 < 1) {
             getBase64(file, (result: any) => {
               console.log(result)
+              // setFileName(fileName)
+              setFileObject({
+                fileName: fileName,
+                fileSrc: result,
+              })
+              onChangeFile &&
+                onChangeFile({
+                  fileName,
+                  fileSrc: result,
+                })
             })
           } else {
             console.log('File size exceeds 1 MiB')
@@ -54,7 +71,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
   return (
     <>
       <FileUploadContainer>
-        {/* <b> No File Selected: </b> */}
+        {/* <b>{fileName ? fileName : 'No File'} </b> */}
         <Button
           variant="contained"
           color="primary"
@@ -69,6 +86,12 @@ const FileUpload: React.FC<FileUploadProps> = ({
             onChange={handleFile}
           />
         </Button>
+        &nbsp;
+        <b>
+          {fileObject.fileName
+            ? fileObject.fileName
+            : 'No File'}
+        </b>
       </FileUploadContainer>
     </>
   )

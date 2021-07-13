@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import Step from '@material-ui/core/Step'
 import StepLabel from '@material-ui/core/StepLabel'
 import Button from '@material-ui/core/Button'
@@ -16,43 +16,111 @@ import {
   StepperStyle,
 } from './AddOrEditEmployeeDetail.Style'
 import { Box } from '@material-ui/core'
-
-function getSteps() {
-  return [
-    'Personal Detail',
-    'Bank Detail',
-    'Professional Detail',
-    'Education Detail',
-    'Experience Detail',
-    'Current Organization Detail',
-  ]
-}
-
-function getStepContent(stepIndex: number) {
-  switch (stepIndex) {
-    case 0:
-      return <PersonalDetail />
-    case 1:
-      return <BankDetail />
-    case 2:
-      return <ProfessionalDetail />
-    case 3:
-      return <EducationDetail />
-    case 4:
-      return <ExperienceDetail />
-    case 5:
-      return <CurrentOrganizationDetail />
-    default:
-      return 'Unknown stepIndex'
-  }
-}
+import EmployeeDetailModal from '../../modals/EmployeeDetailModal'
 
 const AddOrEditEmployeeDetail: React.FC = () => {
+  const personalDetailRef = useRef()
+  const bankDetailRef = useRef()
+  const professionalDetailRef = useRef()
+  const educationDetailRef = useRef()
+  const experienceDetailRef = useRef()
+  const currentOrganizationDetailRef = useRef()
+
   const [activeStep, setActiveStep] =
     React.useState(0)
-  const steps = getSteps()
+
+  const [employeeDetail, setEmployeeDetail] =
+    useState<EmployeeDetailModal>(
+      new EmployeeDetailModal()
+    )
+
+  const setValueInLocalStorage = (
+    employeeDetail: EmployeeDetailModal
+  ) => {
+    localStorage.setItem(
+      'employeeDetail',
+      JSON.stringify(employeeDetail)
+    )
+  }
 
   const handleNext = () => {
+    const employeeDetailTemp = {
+      ...employeeDetail,
+    }
+    switch (activeStep) {
+      case 0:
+        if (personalDetailRef) {
+          employeeDetailTemp.personalDetail = (
+            personalDetailRef!.current! as any
+          ).getPersonalDetailState()
+          setValueInLocalStorage(
+            employeeDetailTemp
+          )
+          setEmployeeDetail(employeeDetailTemp)
+        }
+        break
+      case 1:
+        if (bankDetailRef) {
+          employeeDetailTemp.bankDetail = (
+            bankDetailRef!.current! as any
+          ).getBankDetailState()
+          setValueInLocalStorage(
+            employeeDetailTemp
+          )
+          setEmployeeDetail(employeeDetailTemp)
+        }
+        break
+      case 2:
+        if (professionalDetailRef) {
+          employeeDetailTemp.professionalDetail =
+            (
+              professionalDetailRef!
+                .current! as any
+            ).getProfessionalDetailState()
+          setValueInLocalStorage(
+            employeeDetailTemp
+          )
+          setEmployeeDetail(employeeDetailTemp)
+        }
+        break
+      case 3:
+        if (educationDetailRef) {
+          employeeDetailTemp.educationDetail = (
+            educationDetailRef!.current! as any
+          ).getEducationDetailState()
+          setValueInLocalStorage(
+            employeeDetailTemp
+          )
+          setEmployeeDetail(employeeDetailTemp)
+        }
+        break
+      case 4:
+        if (experienceDetailRef) {
+          employeeDetailTemp.experienceDetail = (
+            experienceDetailRef!.current! as any
+          ).getExperienceDetail()
+          setValueInLocalStorage(
+            employeeDetailTemp
+          )
+          setEmployeeDetail(employeeDetailTemp)
+        }
+        break
+      case 5:
+        if (currentOrganizationDetailRef) {
+          employeeDetailTemp.currentOrganizationDetail =
+            (
+              currentOrganizationDetailRef!
+                .current! as any
+            ).getCurrentOrganizationDetailState()
+          setValueInLocalStorage(
+            employeeDetailTemp
+          )
+          setEmployeeDetail(employeeDetailTemp)
+        }
+        break
+      default:
+        break
+    }
     setActiveStep(
       (prevActiveStep) => prevActiveStep + 1
     )
@@ -66,6 +134,79 @@ const AddOrEditEmployeeDetail: React.FC = () => {
 
   const handleReset = () => {
     setActiveStep(0)
+  }
+
+  const getSteps = () => {
+    return [
+      'Personal Detail',
+      'Bank Detail',
+      'Professional Detail',
+      'Education Detail',
+      'Experience Detail',
+      'Current Organization Detail',
+    ]
+  }
+  const steps = getSteps()
+
+  const getStepContent = (stepIndex: number) => {
+    switch (stepIndex) {
+      case 0:
+        return (
+          <PersonalDetail
+            personalDetailState={
+              employeeDetail.personalDetail
+            }
+            ref={personalDetailRef}
+          />
+        )
+      case 1:
+        return (
+          <BankDetail
+            bankDetailState={
+              employeeDetail.bankDetail
+            }
+            ref={bankDetailRef}
+          />
+        )
+      case 2:
+        return (
+          <ProfessionalDetail
+            professionalDetailState={
+              employeeDetail.professionalDetail
+            }
+            ref={professionalDetailRef}
+          />
+        )
+      case 3:
+        return (
+          <EducationDetail
+            educationDetailState={
+              employeeDetail.educationDetail
+            }
+            ref={educationDetailRef}
+          />
+        )
+      case 4:
+        return (
+          <ExperienceDetail
+            experienceDetailState={
+              employeeDetail.experienceDetail
+            }
+            ref={experienceDetailRef}
+          />
+        )
+      case 5:
+        return (
+          <CurrentOrganizationDetail
+            currentOrganizationDetailState={
+              employeeDetail.currentOrganizationDetail
+            }
+            ref={currentOrganizationDetailRef}
+          />
+        )
+      default:
+        return 'Unknown stepIndex'
+    }
   }
 
   return (

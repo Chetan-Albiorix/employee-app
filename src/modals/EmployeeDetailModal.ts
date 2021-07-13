@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid'
 import BankDetailModal from './BankDetailModal'
 import CurrentOrganizationDetailModal from './CurrentOrganizationDetailModal'
 import EducationDetailModal from './EducationDetailModal'
@@ -15,7 +16,7 @@ export default class EmployeeDetailModal {
   currentOrganizationDetail: CurrentOrganizationDetailModal
 
   constructor() {
-    this.id = ''
+    this.id = uuidv4()
     this.personalDetail =
       new PersonalDetailModal()
     this.bankDetail = new BankDetailModal()
