@@ -12,12 +12,33 @@ import {
   EmployeeTableContainer,
 } from './EmployeeList.Style'
 import { withRouter } from 'react-router'
-import { employeeData } from '../../common/EmployeeData'
+import EmployeeDetailModal from '../../modals/EmployeeDetailModal'
 
 const EmployeeList: React.FC = (props: any) => {
+  let employeeData: EmployeeDetailModal[] = []
+  let employeeDetailList = localStorage.getItem(
+    'employeeDetailList'
+  )
+
+  if (employeeDetailList) {
+    employeeData = JSON.parse(employeeDetailList)
+  }
+
   const addNewEmployeeDetail = () => {
     props.history.push('/employee')
   }
+  const onDeleteRow = (id: string) => {}
+
+  const onEditRow = (id: string) => {
+    const employeeDetail = employeeData.find(
+      (x) => x.id === id
+    )
+    props.history.push({
+      pathname: '/employee/' + id,
+      state: [employeeDetail], // employee detail record
+    })
+  }
+
   return (
     <>
       <EmployeeListContainer
@@ -45,7 +66,7 @@ const EmployeeList: React.FC = (props: any) => {
             <EmployeeListTable
               employeeDetailList={employeeData}
               onDeleteRow={() => {}}
-              onEditRow={() => {}}
+              onEditRow={onEditRow}
             />
           </EmployeeTableContainer>
         </Paper>

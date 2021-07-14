@@ -208,7 +208,7 @@ const EmployeeListTable: React.FC<EmployeeListTableProps> =
     ]
 
     const onEditBtnClicked = (id: string) => {
-      console.log(id)
+      onEditRow(id)
     }
 
     const onDeleteBtnClicked = (id: string) => {

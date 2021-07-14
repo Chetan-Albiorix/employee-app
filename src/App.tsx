@@ -18,10 +18,10 @@ const App: React.FC = () => {
             exact
             children={<EmployeeList />}
           />
-          {/* <Route
+          <Route
             path="/employee/:id"
             children={<AddOrEditEmployeeDetail />}
-          /> */}
+          />
           <Route
             path="/employee"
             exact
