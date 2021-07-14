@@ -1,33 +1,57 @@
-import { Button, Grid } from '@material-ui/core'
+import {
+  Button,
+  Grid,
+  Paper,
+} from '@material-ui/core'
 import PersonAddIcon from '@material-ui/icons/PersonAdd'
 import React from 'react'
-// import styled from 'styled-components'
+import EmployeeListTable from '../EmployeeListTable/EmployeeListTable'
+import {
+  EmployeeListContainer,
+  EmployeeListHeader,
+  EmployeeTableContainer,
+} from './EmployeeList.Style'
+import { withRouter } from 'react-router'
+import { employeeData } from '../../common/EmployeeData'
 
-// const TomatoButton: any = styled(Button)`
-//   color: tomato;
-//   border-color: tomato;
-// `
-
-const EmployeeList: React.FC = () => {
+const EmployeeList: React.FC = (props: any) => {
+  const addNewEmployeeDetail = () => {
+    props.history.push('/employee')
+  }
   return (
     <>
-      <div>
-        <h1>Employee Management System</h1>
-        <Grid container spacing={1}>
-          <Grid xs={11}>
+      <EmployeeListContainer
+        container
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Paper className="employee-wrapper">
+          <Grid xs={12}>
+            <h1>Employee Management System</h1>
+          </Grid>
+          <EmployeeListHeader xs={12}>
             <Button
               variant="contained"
               color="secondary"
               size="large"
               startIcon={<PersonAddIcon />}
+              onClick={addNewEmployeeDetail}
             >
               Employee
             </Button>
-          </Grid>
-        </Grid>
-      </div>
+          </EmployeeListHeader>
+          <EmployeeTableContainer xs={12}>
+            <EmployeeListTable
+              employeeDetailList={employeeData}
+              onDeleteRow={() => {}}
+              onEditRow={() => {}}
+            />
+          </EmployeeTableContainer>
+        </Paper>
+      </EmployeeListContainer>
     </>
   )
 }
 
-export default EmployeeList
+export default withRouter(EmployeeList)

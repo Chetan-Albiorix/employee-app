@@ -28,7 +28,7 @@ const AddOrEditEmployeeDetail: React.FC = () => {
   const currentOrganizationDetailRef = useRef()
 
   const [activeStep, setActiveStep] =
-    React.useState(5)
+    React.useState(0)
 
   const [employeeDetail, setEmployeeDetail] =
     useState<EmployeeDetailModal>(
