@@ -45,6 +45,13 @@ const PersonalDetail: React.FC<PersonalDetailProps> =
       }
       ;(personalDetailTemp as any)[propertyName] =
         value
+      if (
+        personalDetailTemp.isCopyToPresentAddress &&
+        propertyName === 'presentAddress'
+      ) {
+        personalDetailTemp.permanentAddress =
+          personalDetailTemp.presentAddress
+      }
       setPersonalDetail(personalDetailTemp)
     }
 
@@ -62,8 +69,6 @@ const PersonalDetail: React.FC<PersonalDetailProps> =
       personalDetailTemp.isCopyToPresentAddress =
         isChecked
       setPersonalDetail(personalDetailTemp)
-
-      // setIsCopyToPresentAddress(isChecked)
     }
 
     const updateBirthDate = (
@@ -220,6 +225,8 @@ const PersonalDetail: React.FC<PersonalDetailProps> =
                 <Box mx={3} my={1}>
                   <FileUpload
                     label="Image"
+                    fileType="image"
+                    fileSupportMsg="Only JPG OR PNG file are allowed."
                     mimeType={imageMimeType}
                     file={personalDetail.image}
                     onChangeFile={updateImage}
