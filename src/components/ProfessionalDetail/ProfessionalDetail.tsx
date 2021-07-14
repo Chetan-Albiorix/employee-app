@@ -314,6 +314,8 @@ const ProfessionalDetail: React.FC<ProfessionalDetailProps> =
                   <Box mx={3} my={1}>
                     <FileUpload
                       label="Resume"
+                      fileType="pdf"
+                      fileSupportMsg="Only PDF file are allowed."
                       mimeType={pdfMimeType}
                       file={
                         professionalDetail.resumeFile

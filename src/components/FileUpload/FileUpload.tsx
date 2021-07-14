@@ -1,11 +1,14 @@
-import { Button } from '@material-ui/core'
+import { Box, Button } from '@material-ui/core'
 import React from 'react'
 import { useState } from 'react'
 import { FileModal } from '../../modals/FileModal'
 import { FileUploadContainer } from './FileUpload.Style'
+import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 
 interface FileUploadProps {
   mimeType: string[]
+  fileType: string
+  fileSupportMsg: string
   label: string
   onChangeFile?: (fileObject: FileModal) => void
   file: FileModal
@@ -13,9 +16,11 @@ interface FileUploadProps {
 
 const FileUpload: React.FC<FileUploadProps> = ({
   mimeType,
+  fileType,
   label,
   onChangeFile,
   file,
+  fileSupportMsg,
 }) => {
   const [fileObject, setFileObject] =
     useState<FileModal>(file)
@@ -68,10 +73,49 @@ const FileUpload: React.FC<FileUploadProps> = ({
     }
   }
 
+  const openNewTab = () => {
+    if (
+      fileObject &&
+      fileObject.fileName !== '' &&
+      fileObject.fileSrc !== ''
+    ) {
+      if (fileType === 'image') {
+        // preview code for image
+        let image = new Image()
+        image.src = fileObject.fileSrc
+          ? fileObject.fileSrc
+          : ''
+        let w = window.open('')
+        w!.document.write(image.outerHTML)
+        w!.document.title = fileObject.fileName
+      } else {
+        // preview code for pdf
+        let pdfWindow = window.open('')
+        pdfWindow!.document.write(
+          "<iframe width='100%' height='99%' src='data:application/pdf;base64, " +
+            encodeURI(
+              fileObject.fileSrc.split(',')[1]
+            ) +
+            "'></iframe>"
+        )
+        pdfWindow!.document.title =
+          fileObject.fileName
+      }
+    } else {
+      console.log('something went to wrong')
+    }
+  }
+
   return (
     <>
       <FileUploadContainer>
-        {/* <b>{fileName ? fileName : 'No File'} </b> */}
+        <Box component="span" mr={5}>
+          <b>
+            {fileObject.fileName
+              ? fileObject.fileName
+              : 'No File Selected'}
+          </b>
+        </Box>
         <Button
           variant="contained"
           color="primary"
@@ -86,12 +130,20 @@ const FileUpload: React.FC<FileUploadProps> = ({
             onChange={handleFile}
           />
         </Button>
-        &nbsp;
-        <b>
-          {fileObject.fileName
-            ? fileObject.fileName
-            : 'No File'}
-        </b>
+        {fileObject.fileName && (
+          <Box component="span" ml={2}>
+            <Button
+              variant="contained"
+              color="primary"
+              size="small"
+              onClick={openNewTab}
+              startIcon={<OpenInNewIcon />}
+            >
+              preview
+            </Button>
+          </Box>
+        )}
+        <p>{fileSupportMsg}</p>
       </FileUploadContainer>
     </>
   )

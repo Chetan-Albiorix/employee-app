@@ -17,6 +17,7 @@ import {
 } from './AddOrEditEmployeeDetail.Style'
 import { Box } from '@material-ui/core'
 import EmployeeDetailModal from '../../modals/EmployeeDetailModal'
+import CustomSnackbar from '../CustomSnackbar/CustomSnackbar'
 
 const AddOrEditEmployeeDetail: React.FC = () => {
   const personalDetailRef = useRef()
@@ -27,12 +28,15 @@ const AddOrEditEmployeeDetail: React.FC = () => {
   const currentOrganizationDetailRef = useRef()
 
   const [activeStep, setActiveStep] =
-    React.useState(0)
+    React.useState(5)
 
   const [employeeDetail, setEmployeeDetail] =
     useState<EmployeeDetailModal>(
       new EmployeeDetailModal()
     )
+
+  const [isShownSnackbar, setIsShownSnackbar] =
+    useState<boolean>(false)
 
   const setValueInLocalStorage = (
     employeeDetail: EmployeeDetailModal
@@ -120,6 +124,12 @@ const AddOrEditEmployeeDetail: React.FC = () => {
         break
       default:
         break
+    }
+    if (activeStep + 1 === steps.length) {
+      setIsShownSnackbar(true)
+      setTimeout(() => {
+        handleReset()
+      }, 3000)
     }
     setActiveStep(
       (prevActiveStep) => prevActiveStep + 1
@@ -222,50 +232,45 @@ const AddOrEditEmployeeDetail: React.FC = () => {
         ))}
       </StepperStyle>
       <div>
-        {activeStep === steps.length ? (
-          <div>
+        <>
+          <StepperContentWrapper xs={12}>
             <Typography>
-              All steps completed
+              {getStepContent(activeStep)}
             </Typography>
-            <Button onClick={handleReset}>
-              Reset
-            </Button>
-          </div>
-        ) : (
-          <>
-            <StepperContentWrapper xs={12}>
-              <Typography>
-                {getStepContent(activeStep)}
-              </Typography>
-            </StepperContentWrapper>
-            <StepperContainerFooter>
-              <Box component="span" m={1}>
-                <Button
-                  variant="contained"
-                  disabled={activeStep === 0}
-                  onClick={handleBack}
-                  color="secondary"
-                  size="large"
-                >
-                  Back
-                </Button>
-              </Box>
-              <Box component="span" m={1}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleNext}
-                  size="large"
-                >
-                  {activeStep === steps.length - 1
-                    ? 'Finish'
-                    : 'Next'}
-                </Button>
-              </Box>
-            </StepperContainerFooter>
-          </>
-        )}
+          </StepperContentWrapper>
+          <StepperContainerFooter>
+            <Box component="span" m={1}>
+              <Button
+                variant="contained"
+                disabled={activeStep === 0}
+                onClick={handleBack}
+                color="secondary"
+                size="large"
+              >
+                Back
+              </Button>
+            </Box>
+            <Box component="span" m={1}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleNext}
+                size="large"
+              >
+                {activeStep === steps.length - 1
+                  ? 'Finish'
+                  : 'Next'}
+              </Button>
+            </Box>
+          </StepperContainerFooter>
+        </>
       </div>
+      {isShownSnackbar && (
+        <CustomSnackbar
+          message="Employee Details Saved Successfully"
+          handleClose={setIsShownSnackbar}
+        />
+      )}
     </StepperContainer>
   )
 }
