@@ -141,31 +141,36 @@ const AddOrEditEmployeeDetail: React.FC = (
       let employeeDetailList =
         localStorage.getItem('employeeDetailList')
 
-      if (employeeDetailList) {
-        const employeeDetailT: EmployeeDetailModal[] =
-          JSON.parse(employeeDetailList)
-        if (employeeDetailT.length > 0) {
-          const index = employeeDetailT.findIndex(
-            (x) => x.id === employeeDetailTemp.id
-          )
-          if (index !== -1) {
-            employeeDetailT[index] =
-              employeeDetailTemp
-          }
+      let employeeDetailT: EmployeeDetailModal[] =
+        JSON.parse(employeeDetailList!)
+      if (
+        employeeDetailT !== null &&
+        employeeDetailT.length > 0
+      ) {
+        const index = employeeDetailT.findIndex(
+          (x) => x.id === employeeDetailTemp.id
+        )
+        if (index !== -1) {
+          employeeDetailT[index] =
+            employeeDetailTemp
         } else {
           employeeDetailT.push(employeeDetailTemp)
         }
-        localStorage.setItem(
-          'employeeDetailList',
-          JSON.stringify(employeeDetailT)
-        )
-        localStorage.setItem('employeeDetail', '')
+      } else {
+        employeeDetailT = []
+        employeeDetailT.push(employeeDetailTemp)
       }
+      localStorage.setItem(
+        'employeeDetailList',
+        JSON.stringify(employeeDetailT)
+      )
+      localStorage.setItem('employeeDetail', '')
 
       setTimeout(() => {
         props.history.push('/')
         handleReset()
-      }, 3000)
+      }, 500)
+      return
     }
     setActiveStep(
       (prevActiveStep) => prevActiveStep + 1

@@ -128,9 +128,10 @@ const EmployeeListTable: React.FC<EmployeeListTableProps> =
           }
         )
         setEmployeeRecord(employeeListTemp)
+      } else {
+        setEmployeeRecord([])
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [employeeDetailList])
 
     const handleChangeRowsPerPage = (
       event: React.ChangeEvent<HTMLInputElement>
@@ -212,7 +213,7 @@ const EmployeeListTable: React.FC<EmployeeListTableProps> =
     }
 
     const onDeleteBtnClicked = (id: string) => {
-      console.log(id)
+      onDeleteRow(id)
     }
 
     return (

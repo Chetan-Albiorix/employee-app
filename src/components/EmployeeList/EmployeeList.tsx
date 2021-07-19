@@ -4,7 +4,7 @@ import {
   Paper,
 } from '@material-ui/core'
 import PersonAddIcon from '@material-ui/icons/PersonAdd'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import EmployeeListTable from '../EmployeeListTable/EmployeeListTable'
 import {
   EmployeeListContainer,
@@ -13,30 +13,80 @@ import {
 } from './EmployeeList.Style'
 import { withRouter } from 'react-router'
 import EmployeeDetailModal from '../../modals/EmployeeDetailModal'
+import ConfirmationDialog from '../ConfirmationDialog/ConfirmationDialog'
 
 const EmployeeList: React.FC = (props: any) => {
-  let employeeData: EmployeeDetailModal[] = []
+  const [
+    isOpenConfirmationDialog,
+    setIsOpenConfirmationDialog,
+  ] = useState<boolean>(false)
+  const [
+    selectedEmployeeId,
+    setSelectedEmployeeId,
+  ] = useState<string>('')
+
   let employeeDetailList = localStorage.getItem(
     'employeeDetailList'
   )
 
+  useEffect(() => {
+    let employeeDetailList = localStorage.getItem(
+      'employeeDetailList'
+    )
+  }, [])
+
+  let employeeDataTemp: EmployeeDetailModal[] = []
   if (employeeDetailList) {
-    employeeData = JSON.parse(employeeDetailList)
+    employeeDataTemp = JSON.parse(
+      employeeDetailList
+    )
   }
+  const [employeeData, setEmployeeData] =
+    useState<EmployeeDetailModal[]>(
+      employeeDataTemp
+    )
 
   const addNewEmployeeDetail = () => {
     props.history.push('/employee')
   }
-  const onDeleteRow = (id: string) => {}
 
   const onEditRow = (id: string) => {
-    const employeeDetail = employeeData.find(
+    const employeeDetail = employeeData!.find(
       (x) => x.id === id
     )
     props.history.push({
       pathname: '/employee/' + id,
       state: [employeeDetail], // employee detail record
     })
+  }
+
+  const onDeleteRow = (id: string) => {
+    setIsOpenConfirmationDialog(true)
+    setSelectedEmployeeId(id)
+  }
+
+  const onAcceptClicked = () => {
+    const employeeDataTemp = [...employeeData]
+    const index = employeeDataTemp.findIndex(
+      (x) => x.id === selectedEmployeeId
+    )
+    if (index !== -1) {
+      employeeDataTemp.splice(index, 1)
+      setEmployeeData(employeeDataTemp)
+      localStorage.setItem(
+        'employeeDetailList',
+        ''
+      )
+      localStorage.setItem(
+        'employeeDetailList',
+        JSON.stringify(employeeDataTemp)
+      )
+    }
+    setIsOpenConfirmationDialog(false)
+  }
+
+  const onCancelClicked = () => {
+    setIsOpenConfirmationDialog(false)
   }
 
   return (
@@ -64,13 +114,21 @@ const EmployeeList: React.FC = (props: any) => {
           </EmployeeListHeader>
           <EmployeeTableContainer xs={12}>
             <EmployeeListTable
-              employeeDetailList={employeeData}
-              onDeleteRow={() => {}}
+              employeeDetailList={
+                employeeData ? employeeData : []
+              }
+              onDeleteRow={onDeleteRow}
               onEditRow={onEditRow}
             />
           </EmployeeTableContainer>
         </Paper>
       </EmployeeListContainer>
+      {isOpenConfirmationDialog && (
+        <ConfirmationDialog
+          onAcceptClicked={onAcceptClicked}
+          onCancelClicked={onCancelClicked}
+        />
+      )}
     </>
   )
 }
