@@ -18,8 +18,12 @@ import {
 import { Box } from '@material-ui/core'
 import EmployeeDetailModal from '../../modals/EmployeeDetailModal'
 import CustomSnackbar from '../CustomSnackbar/CustomSnackbar'
+import { withRouter } from 'react-router'
+import { useParams } from 'react-router-dom'
 
-const AddOrEditEmployeeDetail: React.FC = () => {
+const AddOrEditEmployeeDetail: React.FC = (
+  props: any
+) => {
   const personalDetailRef = useRef()
   const bankDetailRef = useRef()
   const professionalDetailRef = useRef()
@@ -28,11 +32,18 @@ const AddOrEditEmployeeDetail: React.FC = () => {
   const currentOrganizationDetailRef = useRef()
 
   const [activeStep, setActiveStep] =
-    React.useState(5)
+    React.useState(0)
+
+  // get employee id from url
+  const { id }: any = useParams()
+  // get value of employee detail
+  const { state } = props.location
 
   const [employeeDetail, setEmployeeDetail] =
     useState<EmployeeDetailModal>(
-      new EmployeeDetailModal()
+      id && state
+        ? state[0]
+        : new EmployeeDetailModal()
     )
 
   const [isShownSnackbar, setIsShownSnackbar] =
@@ -127,9 +138,39 @@ const AddOrEditEmployeeDetail: React.FC = () => {
     }
     if (activeStep + 1 === steps.length) {
       setIsShownSnackbar(true)
+      let employeeDetailList =
+        localStorage.getItem('employeeDetailList')
+
+      let employeeDetailT: EmployeeDetailModal[] =
+        JSON.parse(employeeDetailList!)
+      if (
+        employeeDetailT !== null &&
+        employeeDetailT.length > 0
+      ) {
+        const index = employeeDetailT.findIndex(
+          (x) => x.id === employeeDetailTemp.id
+        )
+        if (index !== -1) {
+          employeeDetailT[index] =
+            employeeDetailTemp
+        } else {
+          employeeDetailT.push(employeeDetailTemp)
+        }
+      } else {
+        employeeDetailT = []
+        employeeDetailT.push(employeeDetailTemp)
+      }
+      localStorage.setItem(
+        'employeeDetailList',
+        JSON.stringify(employeeDetailT)
+      )
+      localStorage.setItem('employeeDetail', '')
+
       setTimeout(() => {
+        props.history.push('/')
         handleReset()
-      }, 3000)
+      }, 500)
+      return
     }
     setActiveStep(
       (prevActiveStep) => prevActiveStep + 1
@@ -275,4 +316,4 @@ const AddOrEditEmployeeDetail: React.FC = () => {
   )
 }
 
-export default AddOrEditEmployeeDetail
+export default withRouter(AddOrEditEmployeeDetail)

@@ -6,7 +6,6 @@ export const FileUploadContainer: any = styled.div`
 
   p {
     font-size: 12px;
-    color: red;
     text-align: right;
     margin: 0px;
     padding-top: 4px;
