@@ -210,7 +210,11 @@ const PersonalDetail: React.FC<PersonalDetailProps> =
               <Grid xs={6}>
                 <Box mx={3} my={1}>
                   <DatePicker
-                    date={new Date()}
+                    date={
+                      personalDetail.birthday
+                        ? personalDetail.birthday
+                        : new Date()
+                    }
                     label="Birth Date"
                     disableFuture={true}
                     onDateChanged={(
