@@ -139,15 +139,14 @@ const AddOrEditEmployeeDetail: React.FC = (
   const addNewEmployeeDetailApi = (
     employeeDetail: EmployeeDetailModal
   ) => {
+    setIsLoading(true)
     let message = ''
     AddNewEmployeeDetailApi(employeeDetail)
       .then((res) => {
         if (res.data) {
           message =
             'Employee detail added successfully'
-          setTimeout(() => {
-            props.history.push('/')
-          }, 1000)
+          props.history.push('/')
         } else {
           message = 'Something went to wrong'
         }
@@ -167,15 +166,14 @@ const AddOrEditEmployeeDetail: React.FC = (
   const updateEmployeeDetailApi = (
     employeeDetail: EmployeeDetailModal
   ) => {
+    setIsLoading(true)
     let message = ''
     UpdateEmployeeDetailApi(id, employeeDetail)
       .then((res) => {
         if (res.data) {
           message =
             'Employee details updated successfully'
-          setTimeout(() => {
-            props.history.push('/')
-          }, 1000)
+          props.history.push('/')
         } else {
           message = 'Something went to wrong'
         }
