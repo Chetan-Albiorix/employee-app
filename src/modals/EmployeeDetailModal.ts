@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid'
 import BankDetailModal from './BankDetailModal'
 import CurrentOrganizationDetailModal from './CurrentOrganizationDetailModal'
 import EducationDetailModal from './EducationDetailModal'

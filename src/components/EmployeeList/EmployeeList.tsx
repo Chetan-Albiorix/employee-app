@@ -50,14 +50,13 @@ const EmployeeList: React.FC = (props: any) => {
       .then((res) => {
         if (res.data) {
           setEmployeeData(res.data)
-        } else {
-          console.log('handle error')
         }
         setIsLoading(false)
       })
       .catch((error) => {
+        setResponseMessage(error.message)
+        setIsShownSnackbar(true)
         setIsLoading(false)
-        console.log(error.message)
       })
   }, [])
 
@@ -84,6 +83,7 @@ const EmployeeList: React.FC = (props: any) => {
     setIsLoading(true)
     DeleteEmployeeDetailApi(selectedEmployeeId)
       .then((res) => {
+        let message = ''
         if (res.data) {
           const tempEmployeeData = [
             ...employeeData,
@@ -95,19 +95,20 @@ const EmployeeList: React.FC = (props: any) => {
           if (index !== -1) {
             tempEmployeeData.splice(index, 1)
             setEmployeeData(tempEmployeeData)
+            message =
+              'Employee Detail Deleted Successfully'
           }
-          setIsShownSnackbar(true)
-          setResponseMessage(
-            'Employee Detail Deleted Successfully'
-          )
         } else {
-          console.log('handle error')
+          message = 'Something went to wrong'
         }
+        setResponseMessage(message)
+        setIsShownSnackbar(true)
         setIsLoading(false)
       })
       .catch((error) => {
+        setResponseMessage(error.message)
+        setIsShownSnackbar(true)
         setIsLoading(false)
-        console.log(error.message)
       })
     setIsOpenConfirmationDialog(false)
   }

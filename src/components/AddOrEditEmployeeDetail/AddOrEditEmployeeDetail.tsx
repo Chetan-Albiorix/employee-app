@@ -20,6 +20,11 @@ import EmployeeDetailModal from '../../modals/EmployeeDetailModal'
 import CustomSnackbar from '../CustomSnackbar/CustomSnackbar'
 import { withRouter } from 'react-router'
 import { useParams } from 'react-router-dom'
+import {
+  AddNewEmployeeDetailApi,
+  UpdateEmployeeDetailApi,
+} from '../../api/EmployeeController'
+import Spinner from '../Spinner/Spinner'
 
 const AddOrEditEmployeeDetail: React.FC = (
   props: any
@@ -49,14 +54,11 @@ const AddOrEditEmployeeDetail: React.FC = (
   const [isShownSnackbar, setIsShownSnackbar] =
     useState<boolean>(false)
 
-  const setValueInLocalStorage = (
-    employeeDetail: EmployeeDetailModal
-  ) => {
-    localStorage.setItem(
-      'employeeDetail',
-      JSON.stringify(employeeDetail)
-    )
-  }
+  const [responseMessage, setResponseMessage] =
+    useState<string>('')
+
+  const [isLoading, setIsLoading] =
+    useState<boolean>(false)
 
   const handleNext = () => {
     const employeeDetailTemp = {
@@ -68,9 +70,6 @@ const AddOrEditEmployeeDetail: React.FC = (
           employeeDetailTemp.personalDetail = (
             personalDetailRef!.current! as any
           ).getPersonalDetailState()
-          setValueInLocalStorage(
-            employeeDetailTemp
-          )
           setEmployeeDetail(employeeDetailTemp)
         }
         break
@@ -79,9 +78,6 @@ const AddOrEditEmployeeDetail: React.FC = (
           employeeDetailTemp.bankDetail = (
             bankDetailRef!.current! as any
           ).getBankDetailState()
-          setValueInLocalStorage(
-            employeeDetailTemp
-          )
           setEmployeeDetail(employeeDetailTemp)
         }
         break
@@ -92,9 +88,6 @@ const AddOrEditEmployeeDetail: React.FC = (
               professionalDetailRef!
                 .current! as any
             ).getProfessionalDetailState()
-          setValueInLocalStorage(
-            employeeDetailTemp
-          )
           setEmployeeDetail(employeeDetailTemp)
         }
         break
@@ -103,9 +96,6 @@ const AddOrEditEmployeeDetail: React.FC = (
           employeeDetailTemp.educationDetail = (
             educationDetailRef!.current! as any
           ).getEducationDetailState()
-          setValueInLocalStorage(
-            employeeDetailTemp
-          )
           setEmployeeDetail(employeeDetailTemp)
         }
         break
@@ -114,9 +104,6 @@ const AddOrEditEmployeeDetail: React.FC = (
           employeeDetailTemp.experienceDetail = (
             experienceDetailRef!.current! as any
           ).getExperienceDetail()
-          setValueInLocalStorage(
-            employeeDetailTemp
-          )
           setEmployeeDetail(employeeDetailTemp)
         }
         break
@@ -127,64 +114,84 @@ const AddOrEditEmployeeDetail: React.FC = (
               currentOrganizationDetailRef!
                 .current! as any
             ).getCurrentOrganizationDetailState()
-          setValueInLocalStorage(
-            employeeDetailTemp
-          )
           setEmployeeDetail(employeeDetailTemp)
+          if (id) {
+            updateEmployeeDetailApi(
+              employeeDetailTemp
+            )
+          } else {
+            addNewEmployeeDetailApi(
+              employeeDetailTemp
+            )
+          }
         }
         break
       default:
         break
     }
-    if (activeStep + 1 === steps.length) {
-      setIsShownSnackbar(true)
-      let employeeDetailList =
-        localStorage.getItem('employeeDetailList')
-
-      let employeeDetailT: EmployeeDetailModal[] =
-        JSON.parse(employeeDetailList!)
-      if (
-        employeeDetailT !== null &&
-        employeeDetailT.length > 0
-      ) {
-        const index = employeeDetailT.findIndex(
-          (x) => x.id === employeeDetailTemp.id
-        )
-        if (index !== -1) {
-          employeeDetailT[index] =
-            employeeDetailTemp
-        } else {
-          employeeDetailT.push(employeeDetailTemp)
-        }
-      } else {
-        employeeDetailT = []
-        employeeDetailT.push(employeeDetailTemp)
-      }
-      localStorage.setItem(
-        'employeeDetailList',
-        JSON.stringify(employeeDetailT)
+    if (activeStep + 1 !== steps.length) {
+      setActiveStep(
+        (prevActiveStep) => prevActiveStep + 1
       )
-      localStorage.setItem('employeeDetail', '')
-
-      setTimeout(() => {
-        props.history.push('/')
-        handleReset()
-      }, 500)
-      return
     }
-    setActiveStep(
-      (prevActiveStep) => prevActiveStep + 1
-    )
+  }
+
+  const addNewEmployeeDetailApi = (
+    employeeDetail: EmployeeDetailModal
+  ) => {
+    let message = ''
+    AddNewEmployeeDetailApi(employeeDetail)
+      .then((res) => {
+        if (res.data) {
+          message =
+            'Added Employee Details Successfully'
+          setTimeout(() => {
+            props.history.push('/')
+          }, 1000)
+        } else {
+          message = 'Something went to wrong'
+        }
+        setIsLoading(false)
+        setResponseMessage(message)
+        setIsShownSnackbar(true)
+      })
+      .catch((error) => {
+        setResponseMessage(error.message)
+        setIsShownSnackbar(true)
+        setIsLoading(false)
+      })
+  }
+
+  const updateEmployeeDetailApi = (
+    employeeDetail: EmployeeDetailModal
+  ) => {
+    let message = ''
+    UpdateEmployeeDetailApi(id, employeeDetail)
+      .then((res) => {
+        if (res.data) {
+          message =
+            'Updated Employee Details Successfully'
+          setTimeout(() => {
+            props.history.push('/')
+          }, 1000)
+        } else {
+          message = 'Something went to wrong'
+        }
+        setIsLoading(false)
+        setResponseMessage(message)
+        setIsShownSnackbar(true)
+      })
+      .catch((error) => {
+        setResponseMessage(error.message)
+        setIsShownSnackbar(true)
+        setIsLoading(false)
+      })
   }
 
   const handleBack = () => {
     setActiveStep(
       (prevActiveStep) => prevActiveStep - 1
     )
-  }
-
-  const handleReset = () => {
-    setActiveStep(0)
   }
 
   const getSteps = () => {
@@ -306,9 +313,10 @@ const AddOrEditEmployeeDetail: React.FC = (
           </StepperContainerFooter>
         </>
       </div>
+      {isLoading && <Spinner />}
       {isShownSnackbar && (
         <CustomSnackbar
-          message="Employee Details Saved Successfully"
+          message={responseMessage}
           handleClose={setIsShownSnackbar}
         />
       )}
