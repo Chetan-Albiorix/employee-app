@@ -16,7 +16,7 @@ export default class EmployeeDetailModal {
   currentOrganizationDetail: CurrentOrganizationDetailModal
 
   constructor() {
-    this.id = uuidv4()
+    this.id = ''
     this.personalDetail =
       new PersonalDetailModal()
     this.bankDetail = new BankDetailModal()

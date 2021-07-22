@@ -14,47 +14,52 @@ import {
 import { withRouter } from 'react-router'
 import EmployeeDetailModal from '../../modals/EmployeeDetailModal'
 import ConfirmationDialog from '../ConfirmationDialog/ConfirmationDialog'
-import { GetEmployeeDetailListApi } from '../../api/EmployeeController'
+import {
+  DeleteEmployeeDetailApi,
+  GetEmployeeDetailListApi,
+} from '../../api/EmployeeController'
+import Spinner from '../Spinner/Spinner'
+import CustomSnackbar from '../CustomSnackbar/CustomSnackbar'
 
 const EmployeeList: React.FC = (props: any) => {
   const [
     isOpenConfirmationDialog,
     setIsOpenConfirmationDialog,
   ] = useState<boolean>(false)
+
   const [
     selectedEmployeeId,
     setSelectedEmployeeId,
   ] = useState<string>('')
 
-  let employeeDetailList = localStorage.getItem(
-    'employeeDetailList'
-  )
+  const [isLoading, setIsLoading] =
+    useState<boolean>(false)
+
+  const [isShownSnackbar, setIsShownSnackbar] =
+    useState<boolean>(false)
+
+  const [responseMessage, setResponseMessage] =
+    useState<string>('')
+
+  const [employeeData, setEmployeeData] =
+    useState<EmployeeDetailModal[]>([])
 
   useEffect(() => {
-    let employeeDetailList = localStorage.getItem(
-      'employeeDetailList'
-    )
-  }, [])
-
-  useEffect(() => {
+    setIsLoading(true)
     GetEmployeeDetailListApi()
       .then((res) => {
-        debugger
-        console.log('res' + res)
+        if (res.data) {
+          setEmployeeData(res.data)
+        } else {
+          console.log('handle error')
+        }
+        setIsLoading(false)
       })
-      .catch((error) => console.log(error))
-  })
-
-  let employeeDataTemp: EmployeeDetailModal[] = []
-  if (employeeDetailList) {
-    employeeDataTemp = JSON.parse(
-      employeeDetailList
-    )
-  }
-  const [employeeData, setEmployeeData] =
-    useState<EmployeeDetailModal[]>(
-      employeeDataTemp
-    )
+      .catch((error) => {
+        setIsLoading(false)
+        console.log(error.message)
+      })
+  }, [])
 
   const addNewEmployeeDetail = () => {
     props.history.push('/employee')
@@ -76,22 +81,34 @@ const EmployeeList: React.FC = (props: any) => {
   }
 
   const onAcceptClicked = () => {
-    const employeeDataTemp = [...employeeData]
-    const index = employeeDataTemp.findIndex(
-      (x) => x.id === selectedEmployeeId
-    )
-    if (index !== -1) {
-      employeeDataTemp.splice(index, 1)
-      setEmployeeData(employeeDataTemp)
-      localStorage.setItem(
-        'employeeDetailList',
-        ''
-      )
-      localStorage.setItem(
-        'employeeDetailList',
-        JSON.stringify(employeeDataTemp)
-      )
-    }
+    setIsLoading(true)
+    DeleteEmployeeDetailApi(selectedEmployeeId)
+      .then((res) => {
+        if (res.data) {
+          const tempEmployeeData = [
+            ...employeeData,
+          ]
+          const index =
+            tempEmployeeData.findIndex(
+              (x) => x.id === res.data
+            )
+          if (index !== -1) {
+            tempEmployeeData.splice(index, 1)
+            setEmployeeData(tempEmployeeData)
+          }
+          setIsShownSnackbar(true)
+          setResponseMessage(
+            'Employee Detail Deleted Successfully'
+          )
+        } else {
+          console.log('handle error')
+        }
+        setIsLoading(false)
+      })
+      .catch((error) => {
+        setIsLoading(false)
+        console.log(error.message)
+      })
     setIsOpenConfirmationDialog(false)
   }
 
@@ -137,6 +154,13 @@ const EmployeeList: React.FC = (props: any) => {
         <ConfirmationDialog
           onAcceptClicked={onAcceptClicked}
           onCancelClicked={onCancelClicked}
+        />
+      )}
+      {isLoading && <Spinner />}
+      {isShownSnackbar && (
+        <CustomSnackbar
+          message={responseMessage}
+          handleClose={setIsShownSnackbar}
         />
       )}
     </>
