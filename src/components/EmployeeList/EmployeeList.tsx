@@ -14,6 +14,7 @@ import {
 import { withRouter } from 'react-router'
 import EmployeeDetailModal from '../../modals/EmployeeDetailModal'
 import ConfirmationDialog from '../ConfirmationDialog/ConfirmationDialog'
+import { GetEmployeeDetailListApi } from '../../api/EmployeeController'
 
 const EmployeeList: React.FC = (props: any) => {
   const [
@@ -34,6 +35,15 @@ const EmployeeList: React.FC = (props: any) => {
       'employeeDetailList'
     )
   }, [])
+
+  useEffect(() => {
+    GetEmployeeDetailListApi()
+      .then((res) => {
+        debugger
+        console.log('res' + res)
+      })
+      .catch((error) => console.log(error))
+  })
 
   let employeeDataTemp: EmployeeDetailModal[] = []
   if (employeeDetailList) {

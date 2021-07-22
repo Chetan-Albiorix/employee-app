@@ -7,6 +7,7 @@ import {
 import './App.css'
 import AddOrEditEmployeeDetail from './components/AddOrEditEmployeeDetail/AddOrEditEmployeeDetail'
 import EmployeeList from './components/EmployeeList/EmployeeList'
+require('dotenv').config()
 
 const App: React.FC = () => {
   return (
