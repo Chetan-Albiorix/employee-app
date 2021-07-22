@@ -47,14 +47,16 @@ const EmployeeList: React.FC = (props: any) => {
   useEffect(() => {
     setIsLoading(true)
     GetEmployeeDetailListApi()
-      .then((res) => {
+      .then((res: any) => {
         if (res.data) {
           setEmployeeData(res.data)
         }
         setIsLoading(false)
       })
       .catch((error) => {
-        setResponseMessage(error.message)
+        setResponseMessage(
+          error.response.data.message
+        )
         setIsShownSnackbar(true)
         setIsLoading(false)
       })
@@ -106,7 +108,9 @@ const EmployeeList: React.FC = (props: any) => {
         setIsLoading(false)
       })
       .catch((error) => {
-        setResponseMessage(error.message)
+        setResponseMessage(
+          error.response.data.message
+        )
         setIsShownSnackbar(true)
         setIsLoading(false)
       })

@@ -144,7 +144,7 @@ const AddOrEditEmployeeDetail: React.FC = (
       .then((res) => {
         if (res.data) {
           message =
-            'Added Employee Details Successfully'
+            'Employee detail added successfully'
           setTimeout(() => {
             props.history.push('/')
           }, 1000)
@@ -156,7 +156,9 @@ const AddOrEditEmployeeDetail: React.FC = (
         setIsShownSnackbar(true)
       })
       .catch((error) => {
-        setResponseMessage(error.message)
+        setResponseMessage(
+          error.response.data.message
+        )
         setIsShownSnackbar(true)
         setIsLoading(false)
       })
@@ -170,7 +172,7 @@ const AddOrEditEmployeeDetail: React.FC = (
       .then((res) => {
         if (res.data) {
           message =
-            'Updated Employee Details Successfully'
+            'Employee details updated successfully'
           setTimeout(() => {
             props.history.push('/')
           }, 1000)
@@ -182,7 +184,9 @@ const AddOrEditEmployeeDetail: React.FC = (
         setIsShownSnackbar(true)
       })
       .catch((error) => {
-        setResponseMessage(error.message)
+        setResponseMessage(
+          error.response.data.message
+        )
         setIsShownSnackbar(true)
         setIsLoading(false)
       })
