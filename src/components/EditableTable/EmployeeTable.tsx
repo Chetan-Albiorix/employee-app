@@ -60,6 +60,9 @@ const EmployeeTable: React.FC<EmployeeTableProps> =
       return fieldList.length > 0 ? (
         <>
           {fieldList.map((item) => {
+            if (item === '_id') {
+              return ''
+            }
             return (
               <TableCell
                 component="th"

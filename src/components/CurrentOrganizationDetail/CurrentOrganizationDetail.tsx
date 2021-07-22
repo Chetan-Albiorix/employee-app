@@ -80,7 +80,11 @@ const CurrentOrganizationDetail: React.FC<CurrentOrganizationDetailProps> =
                 <Grid xs={6}>
                   <Box mx={3} my={1}>
                     <DatePicker
-                      date={new Date()}
+                      date={
+                        currentOrganizationDetail.joiningDate
+                          ? currentOrganizationDetail.joiningDate
+                          : new Date()
+                      }
                       label="Joining Date"
                       disableFuture={true}
                       onDateChanged={(
@@ -97,7 +101,11 @@ const CurrentOrganizationDetail: React.FC<CurrentOrganizationDetailProps> =
                 <Grid xs={6}>
                   <Box mx={3} my={1}>
                     <DatePicker
-                      date={new Date()}
+                      date={
+                        currentOrganizationDetail.nextAppraisalDate
+                          ? currentOrganizationDetail.nextAppraisalDate
+                          : new Date()
+                      }
                       label="Next Appraisal Date"
                       disableFuture={false}
                       onDateChanged={(

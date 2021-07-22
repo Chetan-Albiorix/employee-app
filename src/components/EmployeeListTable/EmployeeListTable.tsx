@@ -11,7 +11,9 @@ import TableRow from '@material-ui/core/TableRow'
 import EmployeeDetailModal from '../../modals/EmployeeDetailModal'
 import DeleteIcon from '@material-ui/icons/Delete'
 import EditIcon from '@material-ui/icons/Edit'
+import GetAppIcon from '@material-ui/icons/GetApp'
 import { Button } from '@material-ui/core'
+import { FileModal } from '../../modals/FileModal'
 
 interface Column {
   id:
@@ -20,6 +22,7 @@ interface Column {
     | 'designation'
     | 'email'
     | 'mobileNo'
+    | 'resume'
     | 'action'
   label: string
   minWidth?: number
@@ -34,6 +37,7 @@ interface Employee {
   designation: string
   email: string
   mobileNo: string
+  resume: FileModal
   action: any
 }
 
@@ -92,6 +96,7 @@ const EmployeeListTable: React.FC<EmployeeListTableProps> =
               designation: '',
               email: '',
               mobileNo: '',
+              resume: new FileModal(),
               action: '',
             }
             tableRow.id = employeeDetail.id
@@ -99,7 +104,7 @@ const EmployeeListTable: React.FC<EmployeeListTableProps> =
               employeeDetail.personalDetail
                 ? employeeDetail.personalDetail
                     .firstName +
-                  '' +
+                  ' ' +
                   employeeDetail.personalDetail
                     .lastName
                 : ''
@@ -124,6 +129,12 @@ const EmployeeListTable: React.FC<EmployeeListTableProps> =
                 ? employeeDetail.personalDetail
                     .mobileNumber
                 : ''
+            tableRow.resume =
+              employeeDetail.professionalDetail
+                ? (employeeDetail
+                    .professionalDetail
+                    .resumeFile as FileModal)
+                : new FileModal()
             employeeListTemp.push(tableRow)
           }
         )
@@ -171,6 +182,33 @@ const EmployeeListTable: React.FC<EmployeeListTableProps> =
         align: 'center',
       },
       {
+        id: 'resume',
+        label: 'Resume',
+        minWidth: 100,
+        align: 'right',
+        action: (
+          id: string,
+          resume: FileModal
+        ) => {
+          return (
+            <>
+              <Button
+                onClick={() =>
+                  downloadResumePdf(resume)
+                }
+              >
+                <GetAppIcon
+                  color="action"
+                  style={{
+                    fontSize: 28,
+                  }}
+                />
+              </Button>
+            </>
+          )
+        },
+      },
+      {
         id: 'action',
         label: '',
         minWidth: 100,
@@ -179,9 +217,7 @@ const EmployeeListTable: React.FC<EmployeeListTableProps> =
           return (
             <>
               <Button
-                onClick={() =>
-                  onEditBtnClicked(id)
-                }
+                onClick={() => onEditRow(id)}
               >
                 <EditIcon
                   color="primary"
@@ -191,9 +227,7 @@ const EmployeeListTable: React.FC<EmployeeListTableProps> =
                 />
               </Button>
               <Button
-                onClick={() =>
-                  onDeleteBtnClicked(id)
-                }
+                onClick={() => onDeleteRow(id)}
               >
                 <DeleteIcon
                   color="secondary"
@@ -208,12 +242,14 @@ const EmployeeListTable: React.FC<EmployeeListTableProps> =
       },
     ]
 
-    const onEditBtnClicked = (id: string) => {
-      onEditRow(id)
-    }
-
-    const onDeleteBtnClicked = (id: string) => {
-      onDeleteRow(id)
+    const downloadResumePdf = (
+      resume: FileModal
+    ) => {
+      const downloadLink =
+        document.createElement('a')
+      downloadLink.href = resume.fileSrc
+      downloadLink.download = resume.fileName
+      downloadLink.click()
     }
 
     return (
@@ -264,7 +300,8 @@ const EmployeeListTable: React.FC<EmployeeListTableProps> =
                           >
                             {column.action
                               ? column.action(
-                                  row.id
+                                  row.id,
+                                  row.resume
                                 )
                               : value}
                           </TableCell>
