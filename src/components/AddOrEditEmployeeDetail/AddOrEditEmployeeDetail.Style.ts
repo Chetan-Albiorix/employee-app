@@ -15,6 +15,15 @@ export const StepperContainerFooter: any = styled.div`
   text-align: right;
   padding-right: 1%;
   padding-top: 10px;
+
+  .left-align {
+    float: left;
+    margin-left: 3.5%;
+  }
+  .right-align {
+    float: right;
+    margin-right: 1.5%;
+  }
 `
 
 export const StepperContentWrapper: any = styled(
