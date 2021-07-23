@@ -9,7 +9,6 @@ import BankDetail from '../BankDetail/BankDetail'
 import EducationDetail from '../EducationDetail/EducationDetail'
 import ExperienceDetail from '../ExperienceDetail/ExperienceDetail'
 import CurrentOrganizationDetail from '../CurrentOrganizationDetail/CurrentOrganizationDetail'
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import {
   StepperContainer,
   StepperContainerFooter,
@@ -26,10 +25,17 @@ import {
   UpdateEmployeeDetailApi,
 } from '../../api/EmployeeController'
 import Spinner from '../Spinner/Spinner'
+import validationSchema from './validationSchema'
+import formInitialValues from './formInitialValues'
+import { Formik, Form } from 'formik'
+import PersonalDetailFormModel from './PersonalDetailFormModel'
 
 const AddOrEditEmployeeDetail: React.FC = (
   props: any
 ) => {
+  const { formId, formField } =
+    PersonalDetailFormModel
+
   const personalDetailRef = useRef()
   const bankDetailRef = useRef()
   const professionalDetailRef = useRef()
@@ -60,6 +66,21 @@ const AddOrEditEmployeeDetail: React.FC = (
 
   const [isLoading, setIsLoading] =
     useState<boolean>(false)
+
+  const currentValidationSchema =
+    validationSchema[activeStep]
+
+  const _handleSubmit = (
+    values: any,
+    actions: any
+  ) => {
+    // setActiveStep(
+    //   (prevActiveStep) => prevActiveStep + 1
+    // )
+    handleNext()
+    actions.setTouched({})
+    actions.setSubmitting(false)
+  }
 
   const handleNext = () => {
     const employeeDetailTemp = {
@@ -222,6 +243,7 @@ const AddOrEditEmployeeDetail: React.FC = (
               employeeDetail.personalDetail
             }
             ref={personalDetailRef}
+            formField={formField}
           />
         )
       case 1:
@@ -288,49 +310,68 @@ const AddOrEditEmployeeDetail: React.FC = (
       </StepperStyle>
       <div>
         <>
-          <StepperContentWrapper xs={12}>
-            <Typography>
-              {getStepContent(activeStep)}
-            </Typography>
-          </StepperContentWrapper>
-          <StepperContainerFooter>
-            <div className="left-align">
-              <Box component="span" m={1}>
-                <Button
-                  variant="contained"
-                  onClick={backToEmployeeList}
-                  color="primary"
-                  size="large"
-                >
-                  Back to List
-                </Button>
-              </Box>
-            </div>
-            <div className="right-align">
-              <Box component="span" m={1}>
-                <Button
-                  variant="contained"
-                  disabled={activeStep === 0}
-                  onClick={handleBack}
-                  size="large"
-                >
-                  Back
-                </Button>
-              </Box>
-              <Box component="span" m={1}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleNext}
-                  size="large"
-                >
-                  {activeStep === steps.length - 1
-                    ? 'Finish'
-                    : 'Next'}
-                </Button>
-              </Box>
-            </div>
-          </StepperContainerFooter>
+          <Formik
+            initialValues={formInitialValues}
+            validationSchema={
+              currentValidationSchema
+            }
+            onSubmit={(value, action) => {
+              _handleSubmit(value, action)
+            }}
+          >
+            {({ isSubmitting }) => (
+              <Form id={formId}>
+                <StepperContentWrapper xs={12}>
+                  <Typography>
+                    {getStepContent(activeStep)}
+                  </Typography>
+                </StepperContentWrapper>
+                <StepperContainerFooter>
+                  <div className="left-align">
+                    <Box component="span" m={1}>
+                      <Button
+                        variant="contained"
+                        onClick={
+                          backToEmployeeList
+                        }
+                        color="primary"
+                        size="large"
+                      >
+                        Back to List
+                      </Button>
+                    </Box>
+                  </div>
+                  <div className="right-align">
+                    <Box component="span" m={1}>
+                      <Button
+                        variant="contained"
+                        disabled={
+                          activeStep === 0
+                        }
+                        onClick={handleBack}
+                        size="large"
+                      >
+                        Back
+                      </Button>
+                    </Box>
+                    <Box component="span" m={1}>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        size="large"
+                        type="submit"
+                      >
+                        {activeStep ===
+                        steps.length - 1
+                          ? 'Finish'
+                          : 'Next'}
+                      </Button>
+                    </Box>
+                  </div>
+                </StepperContainerFooter>
+              </Form>
+            )}
+          </Formik>
         </>
       </div>
       {isLoading && <Spinner />}
