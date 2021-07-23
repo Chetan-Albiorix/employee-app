@@ -9,6 +9,7 @@ import BankDetail from '../BankDetail/BankDetail'
 import EducationDetail from '../EducationDetail/EducationDetail'
 import ExperienceDetail from '../ExperienceDetail/ExperienceDetail'
 import CurrentOrganizationDetail from '../CurrentOrganizationDetail/CurrentOrganizationDetail'
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import {
   StepperContainer,
   StepperContainerFooter,
@@ -208,6 +209,10 @@ const AddOrEditEmployeeDetail: React.FC = (
   }
   const steps = getSteps()
 
+  const backToEmployeeList = () => {
+    props.history.push('/')
+  }
+
   const getStepContent = (stepIndex: number) => {
     switch (stepIndex) {
       case 0:
@@ -289,29 +294,42 @@ const AddOrEditEmployeeDetail: React.FC = (
             </Typography>
           </StepperContentWrapper>
           <StepperContainerFooter>
-            <Box component="span" m={1}>
-              <Button
-                variant="contained"
-                disabled={activeStep === 0}
-                onClick={handleBack}
-                color="secondary"
-                size="large"
-              >
-                Back
-              </Button>
-            </Box>
-            <Box component="span" m={1}>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleNext}
-                size="large"
-              >
-                {activeStep === steps.length - 1
-                  ? 'Finish'
-                  : 'Next'}
-              </Button>
-            </Box>
+            <div className="left-align">
+              <Box component="span" m={1}>
+                <Button
+                  variant="contained"
+                  onClick={backToEmployeeList}
+                  color="primary"
+                  size="large"
+                >
+                  Back to List
+                </Button>
+              </Box>
+            </div>
+            <div className="right-align">
+              <Box component="span" m={1}>
+                <Button
+                  variant="contained"
+                  disabled={activeStep === 0}
+                  onClick={handleBack}
+                  size="large"
+                >
+                  Back
+                </Button>
+              </Box>
+              <Box component="span" m={1}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleNext}
+                  size="large"
+                >
+                  {activeStep === steps.length - 1
+                    ? 'Finish'
+                    : 'Next'}
+                </Button>
+              </Box>
+            </div>
           </StepperContainerFooter>
         </>
       </div>
