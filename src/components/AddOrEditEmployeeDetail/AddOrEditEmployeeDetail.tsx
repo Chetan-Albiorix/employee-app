@@ -25,10 +25,10 @@ import {
   UpdateEmployeeDetailApi,
 } from '../../api/EmployeeController'
 import Spinner from '../Spinner/Spinner'
-import validationSchema from './validationSchema'
-import formInitialValues from './formInitialValues'
+import validationSchema from '../../common/validationSchema/validationSchema'
+import formInitialValues from '../../common/validationSchema/formInitialValues'
 import { Formik, Form } from 'formik'
-import PersonalDetailFormModel from './PersonalDetailFormModel'
+import PersonalDetailFormModel from '../../common/validationSchema/EmployeeDetailFormModel'
 
 const AddOrEditEmployeeDetail: React.FC = (
   props: any

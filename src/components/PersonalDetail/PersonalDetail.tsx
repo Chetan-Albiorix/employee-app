@@ -39,6 +39,10 @@ const PersonalDetail: React.FC<PersonalDetailProps> =
           firstName,
           middleName,
           lastName,
+          email,
+          mobileNumber,
+          presentAddress,
+          permanentAddress,
         },
       }: any = { formField: formField }
 
@@ -121,20 +125,6 @@ const PersonalDetail: React.FC<PersonalDetailProps> =
               <Grid container>
                 <Grid xs={4}>
                   <Box mx={3} my={1}>
-                    {/* <TextField
-                      label="First Name"
-                      name={firstName.name}
-                      value={
-                        personalDetail.firstName
-                      }
-                      onChange={(event) =>
-                        updatePersonalDetail(
-                          event.target.value,
-                          'firstName'
-                        )
-                      }
-                      fullWidth
-                    /> */}
                     <InputField
                       name={firstName.name}
                       label={firstName.label}
@@ -144,69 +134,37 @@ const PersonalDetail: React.FC<PersonalDetailProps> =
                 </Grid>
                 <Grid xs={4}>
                   <Box mx={3} my={1}>
-                    <TextField
-                      label="Middle Name"
-                      value={
-                        personalDetail.middleName
-                      }
+                    <InputField
                       name={middleName.name}
+                      label={middleName.label}
                       fullWidth
-                      onChange={(event) =>
-                        updatePersonalDetail(
-                          event.target.value,
-                          'middleName'
-                        )
-                      }
                     />
                   </Box>
                 </Grid>
                 <Grid xs={4}>
                   <Box mx={3} my={1}>
-                    <TextField
-                      label="Last Name"
-                      value={
-                        personalDetail.lastName
-                      }
+                    <InputField
                       name={lastName.name}
+                      label={lastName.label}
                       fullWidth
-                      onChange={(event) =>
-                        updatePersonalDetail(
-                          event.target.value,
-                          'lastName'
-                        )
-                      }
                     />
                   </Box>
                 </Grid>
                 <Grid xs={4}>
                   <Box mx={3} my={1}>
-                    <TextField
-                      label="Email"
-                      value={personalDetail.email}
+                    <InputField
+                      name={email.name}
+                      label={email.label}
                       fullWidth
-                      onChange={(event) =>
-                        updatePersonalDetail(
-                          event.target.value,
-                          'email'
-                        )
-                      }
                     />
                   </Box>
                 </Grid>
                 <Grid xs={4}>
                   <Box mx={3} my={1}>
-                    <TextField
-                      label="Mobile Number"
+                    <InputField
+                      name={mobileNumber.name}
+                      label={mobileNumber.label}
                       fullWidth
-                      value={
-                        personalDetail.mobileNumber
-                      }
-                      onChange={(event) =>
-                        updatePersonalDetail(
-                          event.target.value,
-                          'mobileNumber'
-                        )
-                      }
                     />
                   </Box>
                 </Grid>
@@ -259,21 +217,12 @@ const PersonalDetail: React.FC<PersonalDetailProps> =
                 </Grid>
                 <Grid xs={6}>
                   <Box mx={3} my={1}>
-                    <TextField
-                      id="standard-multiline-static"
-                      label="Present Address"
+                    <InputField
+                      name={presentAddress.name}
+                      label={presentAddress.label}
+                      fullWidth
                       multiline
                       rows={4}
-                      fullWidth
-                      value={
-                        personalDetail.presentAddress
-                      }
-                      onChange={(event) =>
-                        updatePersonalDetail(
-                          event.target.value,
-                          'presentAddress'
-                        )
-                      }
                     />
                     <FormControlLabel
                       control={
@@ -296,21 +245,14 @@ const PersonalDetail: React.FC<PersonalDetailProps> =
                 </Grid>
                 <Grid xs={6}>
                   <Box mx={3} my={1}>
-                    <TextField
-                      id="standard-multiline-static"
-                      label="Permanent Address"
+                    <InputField
+                      name={permanentAddress.name}
+                      label={
+                        permanentAddress.label
+                      }
+                      fullWidth
                       multiline
                       rows={4}
-                      fullWidth
-                      value={
-                        personalDetail.permanentAddress
-                      }
-                      onChange={(event) =>
-                        updatePersonalDetail(
-                          event.target.value,
-                          'permanentAddress'
-                        )
-                      }
                     />
                   </Box>
                 </Grid>
